@@ -21,7 +21,7 @@ window.onload = function() {
     /*loaded*/;
   });
   var i, ele;
-  for (i = 0; i < 35 ; i++) {
+  for (i = 0; i < 10 ; i++) {
     ele = document.createElement('br');
     document.getElementsByTagName('body')[0].appendChild(ele);
   }

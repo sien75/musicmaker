@@ -5,13 +5,14 @@
      <title>LivePlay 即时演奏</title>
    </head>
    <body style="user-select:none; margin:0; font-size:30px" onmouseup="clickOn=false;">
+     <h1 style="font-size:30px">MusicMaker Test(LivePlay)</h1>
     <div class="">
       <select id="instruments" onchange="change(this.value)">
        <option value="0000_Aspirin">piano</option>
        <option value="0390_Aspirin">bass</option>
      </select>
     </div>
-    <br><br>
+    <br>
     <div class="playnote" style="margin:10px;">
        <span href="#" onmousedown="clickOn=true;startNote(1)" onmouseup="stopNote(1)"
        onmouseover="startNote(1)" onmouseout="stopNote(1)" style="background-color:red">do</span>
@@ -28,6 +29,8 @@
        <span href="#" onmousedown="clickOn=true;startNote(7)" onmouseup="stopNote(7)"
        onmouseover="startNote(7)" onmouseout="stopNote(7)" style="background-color:red">si</span>
     </div>
+    <br>
+     <a href="../arranger/index.html" style="font-size:17px">switch to arranger</a>
     <script type="text/javascript" src="../webaudiofontplayer.js"></script>
     <script type="text/javascript" src="main.js"></script>
    </body>
