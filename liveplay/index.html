@@ -1,37 +1,22 @@
  <!DOCTYPE html>
- <html>
+ <html >
    <head>
      <meta charset="utf-8">
      <title>LivePlay 即时演奏</title>
    </head>
-   <body style="user-select:none; margin:0; font-size:30px" onmouseup="clickOn=false;">
-     <h1 style="font-size:30px">MusicMaker Test(LivePlay)</h1>
-    <div class="">
-      <select id="instruments" onchange="change(this.value)">
-       <option value="0000_Aspirin">piano</option>
-       <option value="0390_Aspirin">bass</option>
-     </select>
-    </div>
-    <br>
-    <div class="playnote" style="margin:10px;">
-       <span href="#" onmousedown="clickOn=true;startNote(1)" onmouseup="stopNote(1)"
-       onmouseover="startNote(1)" onmouseout="stopNote(1)" style="background-color:red">do</span>
-       <span href="#" onmousedown="clickOn=true;startNote(2)" onmouseup="stopNote(2)"
-       onmouseover="startNote(2)" onmouseout="stopNote(2)" style="background-color:red">re</span>
-       <span href="#" onmousedown="clickOn=true;startNote(3)" onmouseup="stopNote(3)"
-       onmouseover="startNote(3)" onmouseout="stopNote(3)" style="background-color:red">mi</span>
-       <span href="#" onmousedown="clickOn=true;startNote(4)" onmouseup="stopNote(4)"
-       onmouseover="startNote(4)" onmouseout="stopNote(4)" style="background-color:red">fa</span>
-       <span href="#" onmousedown="clickOn=true;startNote(5)" onmouseup="stopNote(5)"
-       onmouseover="startNote(5)" onmouseout="stopNote(5)" style="background-color:red">so</span>
-       <span href="#" onmousedown="clickOn=true;startNote(6)" onmouseup="stopNote(6)"
-       onmouseover="startNote(6)" onmouseout="stopNote(6)" style="background-color:red">la</span>
-       <span href="#" onmousedown="clickOn=true;startNote(7)" onmouseup="stopNote(7)"
-       onmouseover="startNote(7)" onmouseout="stopNote(7)" style="background-color:red">si</span>
-    </div>
-    <br>
-     <a href="../arranger/index.html" style="font-size:17px">switch to arranger</a>
-    <script type="text/javascript" src="../webaudiofontplayer.js"></script>
-    <script type="text/javascript" src="main.js"></script>
+   <body style="user-select:none; margin:0; overflow:hidden; background:rgba(50,100,100,.7);
+   font-family:'Lucida Console',Monaco,monospace">
+     <div style="margin-bottom:5px">
+       <h1 style="font-size:30px; display:inline; margin-right:20px">MusicMaker Test(LivePlay)</h1>
+        <select id="instruments" onchange="change(this.value)">
+         <option value="0000_Aspirin">piano</option>
+         <option value="0390_Aspirin">bass</option>
+       </select>
+       <a href="../arranger/index.html" style="font-size:20px; margin-left:20px">switch to arranger</a>
+     </div>
+     <canvas id="canvas"></canvas>
+     <script type="text/javascript" src="../webaudiofontplayer.js"></script>
+     <script type="text/javascript" src="mycanvas.js"></script>
+     <script type="text/javascript" src="main.js"></script>
    </body>
  </html>
