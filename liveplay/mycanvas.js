@@ -12,6 +12,8 @@ function MyCanvas() {
     keyboardWidth, intervalWidth, groupWidth, keyWidth;
 
   function set() {
+    var browser = new Browser();
+    if(!groupNum) groupNum = browser.versions.mobile ? 3 : 5;
     canvas = document.getElementById('canvas'),
     w = window.innerWidth,
     h = window.innerHeight - 50,
@@ -19,7 +21,6 @@ function MyCanvas() {
     blackHeightRatio = 0.6,
     blackWidthRatio = 0.8,
     groupIntervalRatio = 0.05,
-    groupNum = browser.versions.mobile ? 3 : 5,
     keyboardTop = browser.versions.mobile ? 5 : 0.4*h,
     keyboardLeft = browser.versions.mobile ? 5 : 0.15*w,
     keyBoardBottom = browser.versions.mobile ? h-50 : 0.6*h,
@@ -29,7 +30,17 @@ function MyCanvas() {
     intervalWidth = keyboardWidth * groupIntervalRatio / groupNum,
     groupWidth = keyboardWidth * (1 - groupIntervalRatio) / groupNum,
     keyWidth = groupWidth / 7;
-    console.log(w);
+    cav.clearRect(0, 0, w, h);
+  }
+
+  this.setOrGetGroupNum = function(num) {
+    if(!num) return groupNum;
+    if(num < 1 || num > 5) return;
+    groupNum = parseInt(num);
+    set();
+    canvas.height = h;
+    canvas.width = w;
+    createKeyboard();
   }
 
   this.init = function() {//窗大小变化要重调用reset()
@@ -100,39 +111,36 @@ function MyCanvas() {
     return 0;
   }
 
-  this.positionToRect = function(x, y) {
-    if(y < keyboardTop || y > keyBoardBottom) return 0;
-    if(x < keyboardLeft || x > keyBoardRight) return 0;
+  this.noteToRect = function(note) {
+    if(note < 24 || note > 83)return 0;
 
-    var whichGroup = parseInt((x - keyboardLeft) / (groupWidth + intervalWidth)),
-      whichGroupByNote = whichGroup - parseInt(groupNum / 2),
+    var groupNumByNote = parseInt(2.5 - 0.5 * groupNum) + 2,
+      whichGroup = parseInt((note - 12 * groupNumByNote) / 12),
+      whichNote = note % 12 + 48,
       groupLeft = keyboardLeft + whichGroup * (groupWidth + intervalWidth),
+      whichGroupByNote = whichGroup - parseInt(groupNum / 2),
       groupLeftOfBlack = groupLeft + keyWidth * (1 - blackWidthRatio / 2);
 
-    if(keyboardTop <= y && y <= keyboardTop+keyHeight*blackHeightRatio) {
-      var xB = (x - groupLeftOfBlack) / keyWidth + 1,
-        xBInt = parseInt(xB),
-        diff = xB - xBInt,
-        left = groupLeftOfBlack + (xBInt- 1) * keyWidth;
-      if(xBInt != 3 && xBInt < 7 && xBInt > 0 && 0 < diff && diff < blackWidthRatio)
-        return {
-          color : 'black',
-          clickColor : '#00cc00',
-          isCenC : false,
-          rect : [
-            {left : left,
-            top : keyboardTop,
-            width : keyWidth * blackWidthRatio,
-            height : keyHeight * blackHeightRatio
-            }
-          ]
-        };
+    if([49, 51, 54, 56, 58].indexOf(whichNote) >= 0) {
+      var xBInt = parseInt((whichNote - 48) / 2),
+        left = groupLeftOfBlack + xBInt * keyWidth;
+      return {
+        color : 'black',
+        clickColor : '#00cc00',
+        isCenC : false,
+        rect : [
+          {left : left,
+          top : keyboardTop,
+          width : keyWidth * blackWidthRatio,
+          height : keyHeight * blackHeightRatio
+          }
+        ]
+      }
     };
 
-    var xW = (x - groupLeft) / keyWidth + 1,
-      xWInt = parseInt(xW),
-      left = groupLeft + (xWInt - 1) * keyWidth;
-    if(xWInt > 0 && xWInt < 8) {
+    var xWInt = parseInt((whichNote - 47) / 2);
+      left = groupLeft + xWInt * keyWidth;
+    if(xWInt >= 0 && xWInt <= 6) {
       var retValue = {
         color : 'white',
         clickColor : 'red',
@@ -150,11 +158,11 @@ function MyCanvas() {
           }
         ]
       };
-      if(xWInt == 1 || xWInt == 4)
+      if(xWInt == 0 || xWInt == 3)
         retValue.rect[1].left = left + 1, retValue.rect[1].width = keyWidth * (1 - blackWidthRatio / 2) - 1;
-      if(xWInt == 3 || xWInt == 7)
+      if(xWInt == 2 || xWInt == 6)
         retValue.rect[1].width = keyWidth * (1 - blackWidthRatio / 2) - 1;
-      if(xWInt == 1 && whichGroupByNote == 0)
+      if(xWInt == 0 && whichGroupByNote == 0)
         retValue.isCenC = true;
       return retValue;
     }
@@ -162,20 +170,15 @@ function MyCanvas() {
     return 0;
   }
 
-  var lastPositionNote;
-  this.ifPositionChanged = function(x, y, mousemoveStart) {
-    if(mousemoveStart == 0) {
-      lastPositionNote = this.positionToNote(x, y);
-      return false;
-    }
 
+  this.ifPositionChanged = function(x, y, lastPositionNote) {
     var currentPositionNote = this.positionToNote(x, y);
-    if(currentPositionNote != lastPositionNote) {
-      lastPositionNote = currentPositionNote;
+    if(currentPositionNote != lastPositionNote.a) {
+      lastPositionNote.a = currentPositionNote;
       return true;
     }
 
-    lastPositionNote = currentPositionNote;
+    lastPositionNote.a = currentPositionNote;
     return false;
   }
 
@@ -195,5 +198,31 @@ function MyCanvas() {
       cav.fillStyle = 'black';
       cav.fillText('C', area.rect[0].left+keyWidth*0.15-1, keyboardTop+keyHeight*0.9);
     }
+  }
+
+  var indicatorPosition = {};
+  this.paintIndicator = function(group) {
+    var ip = indicatorPosition;
+    cav.clearRect(ip.left, ip.top, ip.width, ip.height * 0.9);
+    ip.width = groupWidth,
+    ip.height = keyHeight * 0.2,
+    ip.left = keyboardLeft + (groupWidth + intervalWidth) * parseInt(group + groupNum / 2),
+    ip.top = keyboardTop - ip.height,
+    ip.centerX = ip.left + 0.2 * ip.width,
+    ip.centerY = ip.top + 0.5 * ip.height;
+    cav.save();
+    ['#ff0000', '#00ff00', '#0000ff'].forEach(function(color) {
+      cav.fillStyle = color;
+      cav.strokeStyle = '#444';
+      cav.lineWidth = 2;
+      var radius = 0.3 * (ip.height < ip.width * 0.3 ? ip.height : ip.width * 0.3);
+      cav.beginPath();
+      cav.arc(ip.centerX, ip.centerY, radius, 0, Math.PI * 1.5);
+      cav.closePath();
+      cav.stroke();
+      cav.fill();
+      ip.centerX += 0.3 * ip.width;
+    });
+    cav.restore();
   }
 }

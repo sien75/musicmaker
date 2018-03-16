@@ -9,12 +9,32 @@
    font-family:'Lucida Console',Monaco,monospace">
      <div style="margin-bottom:5px">
        <h1 style="font-size:30px; display:inline; margin-right:20px">MusicMaker Test(LivePlay)</h1>
-        <select id="instruments" onchange="change(this.value)">
-         <option value="0000_Aspirin">piano</option>
-         <option value="0390_Aspirin">bass</option>
+        <select id="selectInstruments">
+         <option value="0000_Aspirin:n">piano</option>
+         <option value="0390_Aspirin:y">bass</option>
+       </select>
+       <select id="octive">
+         <option value="0" id="o0">八度:0</option>
+         <option value="1" id="o1">八度:+1</option>
+         <option value="-1" id="on1">八度:-1</option>
+         <option value="2" id="o2">八度:+2</option>
+         <option value="-2" id="on2">八度:-2</option>
+       </select>
+       <select id="keyboardGroup">
+         <option value="0" id="k1">键盘控制小字一组</option>
+         <option value="-2" id="k4">键盘控制大字组</option>
+         <option value="-1" id="k2">键盘控制小字组</option>
+         <option value="1" id="k3">键盘控制小字二组</option>
+         <option value="2" id="k5">键盘控制小字三组</option>
+       </select>
+       <select id="groupNum">
+         <option value="5" id="g5">键组数目:5</option>
+         <option value="4" id="g4">键组数目:4</option>
+         <option value="3" id="g3">键组数目:3</option>
+         <option value="2" id="g2">键组数目:2</option>
+         <option value="1" id="g1">键组数目:1</option>
        </select>
        <a href="../arranger/index.html" style="font-size:20px; margin-left:20px">switch to arranger</a>
-       <span>bass不能关问题， 颜色不显示问题,采用多种形式的键盘形式如圆形</span>
      </div>
      <canvas id="canvas"></canvas>
      <script type="text/javascript" src="../browser.js"></script>
