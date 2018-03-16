@@ -1,35 +1,38 @@
-var notes = {
-  '1' : 48, '1#' : 49, '2' : 50, '2#' : 51, '3' : 52, '4' : 53, '4#' : 54,
-  '5' : 55, '5#' : 56, '6' : 57, '6#' : 58, '7' : 59
-};
-
 function MyCanvas() {
   var canvas, w, h, cav,
     blackHeightRatio, blackWidthRatio, groupIntervalRatio,
     groupNum,
     keyboardTop, keyboardLeft, keyBoardBottom, keyBoardRight,
     keyHeight,
-    keyboardWidth, intervalWidth, groupWidth, keyWidth;
+    keyboardWidth, intervalWidth, groupWidth, keyWidth,
+    gradient;
+
+  var notes = {
+    '1' : 48, '1#' : 49, '2' : 50, '2#' : 51, '3' : 52, '4' : 53, '4#' : 54,
+    '5' : 55, '5#' : 56, '6' : 57, '6#' : 58, '7' : 59
+  };
 
   function set() {
-    var browser = new Browser();
     if(!groupNum) groupNum = browser.versions.mobile ? 3 : 5;
-    canvas = document.getElementById('canvas'),
-    w = window.innerWidth,
-    h = window.innerHeight - 50,
-    cav = canvas.getContext('2d'),
-    blackHeightRatio = 0.6,
-    blackWidthRatio = 0.8,
-    groupIntervalRatio = 0.05,
-    keyboardTop = browser.versions.mobile ? 5 : 0.4*h,
-    keyboardLeft = browser.versions.mobile ? 5 : 0.15*w,
-    keyBoardBottom = browser.versions.mobile ? h-50 : 0.6*h,
-    keyBoardRight = browser.versions.mobile ? w-5 : 0.85*w,
-    keyHeight = keyBoardBottom - keyboardTop,
-    keyboardWidth = keyBoardRight - keyboardLeft,
-    intervalWidth = keyboardWidth * groupIntervalRatio / groupNum,
-    groupWidth = keyboardWidth * (1 - groupIntervalRatio) / groupNum,
+    canvas = document.getElementById('canvas');
+    w = window.innerWidth;
+    h = w > window.innerHeight ? (window.innerHeight * 0.9) : (window.innerHeight * 0.5);
+    cav = canvas.getContext('2d');
+    blackHeightRatio = 0.6;
+    blackWidthRatio = 0.8;
+    groupIntervalRatio = 0.05;
+    keyboardTop = browser.versions.mobile ? 5 : 0.4*h;
+    keyboardLeft = browser.versions.mobile ? 5 : 0.15*w;
+    keyBoardBottom = browser.versions.mobile ? h-50 : 0.6*h;
+    keyBoardRight = browser.versions.mobile ? w-5 : 0.85*w;
+    keyHeight = keyBoardBottom - keyboardTop;
+    keyboardWidth = keyBoardRight - keyboardLeft;
+    intervalWidth = keyboardWidth * groupIntervalRatio / groupNum;
+    groupWidth = keyboardWidth * (1 - groupIntervalRatio) / groupNum;
     keyWidth = groupWidth / 7;
+    gradient = cav.createRadialGradient(w / 2, h / 2, w / 16, w / 2, h / 2, w / 3.5);
+    gradient.addColorStop(0, '#7f7');
+    gradient.addColorStop(1, '#333');
     cav.clearRect(0, 0, w, h);
   }
 
@@ -40,6 +43,7 @@ function MyCanvas() {
     set();
     canvas.height = h;
     canvas.width = w;
+    drawBackground(0, 0, w, h);
     createKeyboard();
   }
 
@@ -47,7 +51,15 @@ function MyCanvas() {
     set();
     canvas.height = h;
     canvas.width = w;
+    drawBackground(0, 0, w, h);
     createKeyboard();
+  }
+
+  function drawBackground(x, y, width, height) {
+    cav.save();
+    cav.fillStyle = gradient;
+    cav.fillRect(x, y, width, height);
+    cav.restore();
   }
 
   function createKeyboard() {
@@ -60,7 +72,7 @@ function MyCanvas() {
 
   function createKeyGroup(groupLeft, groupRight, isCenC) {
     cav.beginPath();
-    cav.fillStyle = '#fff';
+    cav.fillStyle = '#ddd';
     cav.fillRect(groupLeft, keyboardTop, groupWidth, keyHeight);
     cav.moveTo(groupLeft, keyboardTop);
     cav.lineTo(groupRight, keyboardTop);
@@ -125,7 +137,7 @@ function MyCanvas() {
       var xBInt = parseInt((whichNote - 48) / 2),
         left = groupLeftOfBlack + xBInt * keyWidth;
       return {
-        color : 'black',
+        color : '#000',
         clickColor : '#00cc00',
         isCenC : false,
         rect : [
@@ -142,7 +154,7 @@ function MyCanvas() {
       left = groupLeft + xWInt * keyWidth;
     if(xWInt >= 0 && xWInt <= 6) {
       var retValue = {
-        color : 'white',
+        color : '#ddd',
         clickColor : 'red',
         isCenC : false,
         rect : [
@@ -203,7 +215,7 @@ function MyCanvas() {
   var indicatorPosition = {};
   this.paintIndicator = function(group) {
     var ip = indicatorPosition;
-    cav.clearRect(ip.left, ip.top, ip.width, ip.height * 0.9);
+    drawBackground(ip.left, ip.top, ip.width, ip.height * 0.9);
     ip.width = groupWidth,
     ip.height = keyHeight * 0.2,
     ip.left = keyboardLeft + (groupWidth + intervalWidth) * parseInt(group + groupNum / 2),
