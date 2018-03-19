@@ -19,3 +19,5 @@ function Browser() {
   })();
   this.language = (navigator.browserLanguage || navigator.language).toLowerCase();
 }
+
+var browser = new Browser();
