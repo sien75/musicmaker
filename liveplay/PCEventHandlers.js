@@ -40,13 +40,13 @@ if(!browser.versions.mobile) {
 
   body.onkeydown = function(event) {
     var ew = event.which;
-    if((ew == 75 || ew == 37) && noteOnJudge.indexOf(1) < 0) {
+    if((ew == 75 || ew == 37) && noteOnJudge.indexOf(1) < 0) {//'K' or left key
       var v = parseInt(document.getElementById('keyboardGroup').value);
       computerKeyboardGroup = document.getElementById('keyboardGroup').value
       = v > -parseInt(myCanvas.setOrGetGroupNum() / 2) ? v - 1 : v;
       myCanvas.paintIndicator(computerKeyboardGroup);
     }
-    else if((ew == 76 || ew == 39) && noteOnJudge.indexOf(1) < 0) {
+    else if((ew == 76 || ew == 39) && noteOnJudge.indexOf(1) < 0) {//'L' or right key
       var v = parseInt(document.getElementById('keyboardGroup').value);
       computerKeyboardGroup = document.getElementById('keyboardGroup').value =
         v < parseInt((myCanvas.setOrGetGroupNum() - 1) / 2) ? v + 1 : v;

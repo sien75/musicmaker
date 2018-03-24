@@ -33,7 +33,9 @@ if(!browser.versions.mobile)
   }
 
 document.getElementById('groupNum').onchange = function() {
-  myCanvas.setOrGetGroupNum(parseInt(this.value));
-  handleOctive();
-  handleKeyboardGroup();
+  var tv = parseInt(this.value);
+  myCanvas.setOrGetGroupNum(tv);
+  myAudio.setOrGetOctive(0);
+  handleOctive(tv);
+  handleKeyboardGroup(tv);
 }

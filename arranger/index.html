@@ -4,15 +4,21 @@
 		<meta charset="utf-8">
 		<title>Arranger 编曲</title>
 	</head>
-	<body>
-		<h1>MusicMaker Test(Arranger)</h1>
-		<p id="startState"></p>
-		<button type="button" name="button" id="start1" onclick="start(1)">start(1)</button>
-		<button type="button" name="button" id="start2" onclick="start(2)">start(2)</button>
-		<button type="button" name="button" id="stop" onclick="myAudio.stop()">stop</button>
-		<br><br>
-		<a href="../liveplay/index.html">switch to liveplay</a>
+	<body style="user-select:none; margin:0; overflow:hidden; background:#222;
+	font-family:'Lucida Console',Monaco,monospace">
+		<div style="margin-bottom:5px">
+			<span style="font-size:25px; color:#888; display:inline-block; margin:4px 0 0 5px;
+			border:3px solid; border-radius:5px">MusicMaker</span>
+			<span style="font-size:28px; display:inline-block; color:#888; margin:6px 20px 0 0;">Arranger</span>
+			<button type="button" name="button" id="play">play</button>
+			<a href="../liveplay/index.html" style="float:right; color:#888; margin-top:20px">switch to liveplay</a>
+		</div>
+		<canvas id="canvas"></canvas>
+		<script type="text/javascript" src="../browser.js"></script>
 		<script type="text/javascript" src="../webAudiofontPlayer.js"></script>
+		<script type="text/javascript" src="storage.js"></script>
+		<script type="text/javascript" src="keyboard.js"></script>
+		<script type="text/javascript" src="area.js"></script>
 		<script type="text/javascript" src="myAudio.js"></script>
 		<script type="text/javascript" src="main.js"></script>
 	</body>

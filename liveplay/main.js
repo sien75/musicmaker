@@ -4,7 +4,7 @@ var myCanvas = new MyCanvas(),
 //start
 init();
 
-//Init functions are at below
+//Init functions
 function init() {
   myCanvas.init();
   myAudio.init();
@@ -16,12 +16,11 @@ function initForMobile() {
     gChild4 = document.getElementById('g4'),
     gChild5 = document.getElementById('g5');
   gParent.removeChild(gChild4);
-  gParent.removeChild(gChild5);
+  gParent.removeChild(gChild5);//because of the small screen size of mobile devices, we can only remain 3 groups
 
-  document.getElementById('keyboardGroup').style.display = 'none';
-  handleOctive();
+  document.getElementById('keyboardGroup').style.display = 'none';//keyboard control is not needed on mobile devices
+  handleOctive(parseInt(myCanvas.setOrGetGroupNum()));
   pageSizeReduce();
-  mobileWindowSizeListen();
 }
 
 function initForPC() {
@@ -29,23 +28,23 @@ function initForPC() {
     gChild1 = document.getElementById('g1'),
     gChild2 = document.getElementById('g2');
   gParent.removeChild(gChild1);
-  gParent.removeChild(gChild2);
+  gParent.removeChild(gChild2);//remain at least 3 keyboard groups on PC to make the page much beautiful
 
-  handleOctive();
-  handleKeyboardGroup();
+  handleOctive(parseInt(myCanvas.setOrGetGroupNum()));
+  handleKeyboardGroup(parseInt(myCanvas.setOrGetGroupNum()));
 }
 
-function handleOctive() {
-  var octs = ['n2', '2', 'n1', '1'];
-  for(var i=0; i < myCanvas.setOrGetGroupNum() - 1; i++)
+//overall settings
+function handleOctive(groupNum) {//adjust octive setting by keyboard group number
+  var octs = ['n2', '2', 'n1', '1'];//n2 means 'negative two'
+  for(var i=0; i < groupNum - 1; i++)
     document.getElementById('o' + octs[i]).style.display = 'none';
-  for(; i < [-2, 2, -1, 1].length; i++)
+  for(; i < octs.length; i++)
     document.getElementById('o' + octs[i]).style.display = 'block';
   document.getElementById('octive').value = 0;
-  myAudio.setOrGetOctive(0);
 }
 
-function pageSizeReduce() {
+function pageSizeReduce() {//reduce font size on mobile devices
   var h1 = document.getElementsByTagName('h1'),
     first = h1[0],
     second = h1[1];
@@ -54,21 +53,10 @@ function pageSizeReduce() {
   document.getElementById('switch').style['font-size'] = '12px';
 }
 
-var sizeRecord = {};
-function mobileWindowSizeListen() {
-  window.setInterval(function() {
-    if(sizeRecord.width != window.innerWidth || sizeRecord.height != window.innerHeight)
-      myCanvas.init();
-    sizeRecord.width = window.innerWidth;
-    sizeRecord.height = window.innerHeight;
-  }, 1000);
-}
-
-function handleKeyboardGroup() {
-  for (var i = 5; i > myCanvas.setOrGetGroupNum(); i--)
+function handleKeyboardGroup(groupNum) {//adjust computerKeyboard control setting by keyboard group number
+  for (var i = 5; i > groupNum; i--)
     document.getElementById('k' + i).style.display = 'none';
   for(; i > 0; i--)
     document.getElementById('k' + i).style.display = 'block';
   document.getElementById('keyboardGroup').value = 0;
-  myCanvas.paintIndicator(0);
 }

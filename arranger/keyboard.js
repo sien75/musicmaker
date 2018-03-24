@@ -1,6 +1,7 @@
-function MyCanvas() {
+function Keyboard() {
+  var that = this;
 
-  var canvas, w, h, cav,
+  var canvas, cav,
     blackHeightRatio, blackWidthRatio, groupIntervalRatio,
     groupNum,
     keyboardTop, keyboardLeft, keyBoardBottom, keyBoardRight,
@@ -13,68 +14,35 @@ function MyCanvas() {
     '5' : 55, '5#' : 56, '6' : 57, '6#' : 58, '7' : 59
   };
 
-  this.set = function() {
-    if(!groupNum) groupNum = browser.versions.mobile ? 3 : 5;
-    canvas = document.getElementById('canvas');
-    w = window.innerWidth;
-    h = w > window.innerHeight ? (window.innerHeight * 0.9) : (window.innerHeight * 0.5);
+  this.set = function(_canvas, _top, _left, _width, _height, _groupNum) {
+    groupNum = (1 <= _groupNum && _groupNum <= 5) ? _groupNum : 5;
+    canvas = _canvas;
     cav = canvas.getContext('2d');
     blackHeightRatio = 0.6;
     blackWidthRatio = 0.8;
     groupIntervalRatio = 0.05;
-    keyboardTop = browser.versions.mobile ? 0.01*h : 0.35*h;
-    keyboardLeft = browser.versions.mobile ? 0.01*w : 0.15*w;
-    keyBoardBottom = browser.versions.mobile ? h*0.95 : 0.65*h;
-    keyBoardRight = browser.versions.mobile ? 0.99*w : 0.85*w;
-    keyHeight = keyBoardBottom - keyboardTop;
-    keyboardWidth = keyBoardRight - keyboardLeft;
+    keyboardTop = _top;
+    keyboardLeft = _left;
+    keyBoardBottom = _top + _height;
+    keyBoardRight = _left + _width;
+    keyHeight = _height;
+    keyboardWidth = _width;
     intervalWidth = keyboardWidth * groupIntervalRatio / groupNum;
     groupWidth = keyboardWidth * (1 - groupIntervalRatio) / groupNum;
     keyWidth = groupWidth / 7;
-    gradient = cav.createRadialGradient(w / 2, h / 2, w / 16, w / 2, h / 2, w / 3.5);
-    gradient.addColorStop(0, '#7f7');
-    gradient.addColorStop(1, '#333');
-    cav.clearRect(0, 0, w, h);
-  }
-
-  this.setOrGetGroupNum = function(num) {
-    if(!num) return groupNum;
-    if(num < 1 || num > 5) return;
-    groupNum = num;
-    this.set();
-    canvas.height = h;
-    canvas.width = w;
-    this.drawBackground(0, 0, w, h);
     this.createKeyboard();
-  }
-
-  this.init = function() {//窗大小变化要重调用reset()
-    this.set();
-    canvas.height = h;
-    canvas.width = w;
-    this.drawBackground(0, 0, w, h);
-    this.createKeyboard();
-  }
-
-  this.drawBackground = function(x, y, width, height) {
-    cav.save();
-    cav.fillStyle = gradient;
-    cav.fillRect(x, y, width, height);
-    cav.restore();
   }
 
   this.createKeyboard = function() {
     for(var i = 0; i<groupNum; i++) {
-      var isCenC = i - parseInt(groupNum / 2) == 0 ? true : false;
       this.createKeyGroup(keyboardLeft+i*(groupWidth+intervalWidth),
-        keyboardLeft+i*(groupWidth+intervalWidth)+groupWidth, isCenC);
+        keyboardLeft+i*(groupWidth+intervalWidth)+groupWidth);
     }
-    this.paintIndicator(0);
   }
 
-  this.createKeyGroup = function(groupLeft, groupRight, isCenC) {
+  this.createKeyGroup = function(groupLeft, groupRight) {
     cav.beginPath();
-    cav.fillStyle = '#ddd';
+    cav.fillStyle = 'rgb(255, 255, 255)';
     cav.fillRect(groupLeft, keyboardTop, groupWidth, keyHeight);
     cav.moveTo(groupLeft, keyboardTop);
     cav.lineTo(groupRight, keyboardTop);
@@ -87,17 +55,11 @@ function MyCanvas() {
       if(i == 3)continue;
       cav.moveTo(groupLeft+i*keyWidth, keyboardTop+keyHeight*blackHeightRatio);
       cav.lineTo(groupLeft+i*keyWidth, keyBoardBottom);
-      cav.fillStyle = '#000';
+      cav.fillStyle = 'rgb(0, 0, 0)';
       cav.fillRect(groupLeft+(i-blackWidthRatio/2)*keyWidth, keyboardTop,
         blackWidthRatio*keyWidth, keyHeight*blackHeightRatio);
     }
     cav.stroke();
-
-    if(isCenC) {
-      var a = keyWidth < keyHeight * (1 - blackHeightRatio) ? keyWidth : keyHeight * (1 - blackHeightRatio);
-      cav.font = a + 'px Arial';
-      cav.fillText('C', groupLeft+keyWidth*0.15, keyboardTop+keyHeight*0.9);
-    }
   }
 
   this.positionToNote = function(x, y) {
@@ -139,8 +101,8 @@ function MyCanvas() {
       var xBInt = parseInt((whichNote - 48) / 2),
         left = groupLeftOfBlack + xBInt * keyWidth;
       return {
-        color : '#000',
-        clickColor : '#00cc00',
+        color : 'rgb(0, 0, 0)',
+        clickColor : 'rgb(1, 255, 0)',
         isCenC : false,
         rect : [
           {left : left,
@@ -156,8 +118,8 @@ function MyCanvas() {
       left = groupLeft + xWInt * keyWidth;
     if(xWInt >= 0 && xWInt <= 6) {
       var retValue = {
-        color : '#ddd',
-        clickColor : 'red',
+        color : 'rgb(255, 255, 255)',
+        clickColor : 'rgb(255, 0, 1)',
         isCenC : false,
         rect : [
           {left : left + 1,
@@ -184,70 +146,37 @@ function MyCanvas() {
     return 0;
   }
 
-
-  this.ifPositionChanged = function(x, y, lastPositionNote) {
-    var currentPositionNote = this.positionToNote(x, y);
-    if(currentPositionNote != lastPositionNote.a) {
-      lastPositionNote.a = currentPositionNote;
-      return true;
+  var paintKet_click_interval;
+  this.paintKey = function(note, cOrR) {
+    var area = this.noteToRect(note);
+    if(!area) return;
+    if(cOrR == 'click') {
+      that.paintKey_click(area);
     }
-
-    lastPositionNote.a = currentPositionNote;
-    return false;
-  }
-
-  this.paintKey = function(area, cOrR) {
-    if(!area)return;
-    var color;
-    if(cOrR == 'click') color = area.clickColor;
-    else if(cOrR == 'release') color = area.color;
-    cav.fillStyle = color;
-
-    for(var i=0; i<area.rect.length; i++)
-      cav.fillRect(area.rect[i].left, area.rect[i].top, area.rect[i].width, area.rect[i].height);
-    cav.stroke();
-    if(area.isCenC) {
-      var a = keyWidth < keyHeight * (1 - blackHeightRatio) ? keyWidth : keyHeight * (1 - blackHeightRatio);
-      cav.font = a + 'px Arial';
-      cav.fillStyle = 'black';
-      cav.fillText('C', area.rect[0].left+keyWidth*0.15-1, keyboardTop+keyHeight*0.9);
-    }
-  }
-
-  var indicatorPosition = {};
-  this.paintIndicator = function(group) {
-    var ip = indicatorPosition;
-    this.drawBackground(ip.left, ip.top, ip.width, ip.height * 0.9);
-    ip.width = groupWidth,
-    ip.height = keyHeight * 0.2,
-    ip.left = keyboardLeft + (groupWidth + intervalWidth) * parseInt(group + groupNum / 2),
-    ip.top = keyboardTop - ip.height,
-    ip.centerX = ip.left + 0.2 * ip.width,
-    ip.centerY = ip.top + 0.5 * ip.height;
-    cav.save();
-    ['#ff0000', '#00ff00', '#0000ff'].forEach(function(color) {
+    else if(cOrR == 'release') {
+      window.clearInterval(paintKet_click_interval);
+      var color = area.color;
       cav.fillStyle = color;
-      cav.strokeStyle = '#444';
-      cav.lineWidth = 2;
-      var radius = 0.3 * (ip.height < ip.width * 0.3 ? ip.height : ip.width * 0.3);
-      cav.beginPath();
-      cav.arc(ip.centerX, ip.centerY, radius, 0, Math.PI * 1.5);
-      cav.closePath();
+      for(var i=0; i<area.rect.length; i++)
+        cav.fillRect(area.rect[i].left, area.rect[i].top, area.rect[i].width, area.rect[i].height);
       cav.stroke();
-      cav.fill();
-      ip.centerX += 0.3 * ip.width;
-    });
-    cav.restore();
+    }
   }
 
-  var sizeRecord = {};
-  if(browser.versions.mobile)
-    (function() {//to make page suitable for screen while rotating
-      window.setInterval(function() {
-        if(sizeRecord.width != window.innerWidth || sizeRecord.height != window.innerHeight)
-          this.init();
-        sizeRecord.width = window.innerWidth;
-        sizeRecord.height = window.innerHeight;
-      }, 1000);
-    })();
+  this.paintKey_click = function(area) {
+    var color = area.clickColor, number = 0;
+
+    paintKet_click_interval = window.setInterval(function() {
+      number += 30;
+      if(number > 150) {
+        window.clearInterval(paintKet_click_interval);
+      }
+      color = color.replace((number-30).toString(), number.toString());
+
+      cav.fillStyle = color;
+      for(var i=0; i<area.rect.length; i++)
+        cav.fillRect(area.rect[i].left, area.rect[i].top, area.rect[i].width, area.rect[i].height);
+      cav.stroke();
+    }, 50);
+  }
 }
