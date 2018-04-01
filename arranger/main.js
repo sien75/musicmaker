@@ -1,50 +1,86 @@
-var bpm = 120;//define the bpm
+var bpm = 240;//define the bpm
 
 //instrumentName(pitch, duration, volume), 'duration' means how long the note lasts.
 //eg. duration = 4: 4*beatTime=2s, this note will last 2 seconds.
-/*var musicArray1 = [
-  [piano(C4, 1)],
-  [piano(C4, 1)],
-  [piano(G4, 1)],
-  [piano(G4, 1)],
-  [piano(A4, 1)],
-  [piano(A4, 1)],
-  [piano(G4, 1)]
-];
-var musicInfo1 = {
-  beatTime : 60/bpm,
-  pieceTime : musicArray1.length*60/bpm,
-  allInstruments : ['piano']
-}*/
 var musicArray2 = [
-  [ [piano(c4)], [        ] ],
-  [ [piano(d4)], [piano(c4)] ],
-  [ [piano(E5)], [piano(d4)] ],
-  [ [piano(c4)], [piano(E5)] ],
-  [ [piano(c4)], [piano(c4)] ],
-  [ [piano(d4)], [piano(c4)] ],
-  [ [piano(E5)], [piano(d4)] ],
-  [ [piano(c4)], [piano(E5)] ],
-  [ [         ], [piano(c4)] ]
+  [ [drum(), hihat()],      [] ],
+  [ [hihat()],              [drum(), hihat()] ],
+  [ [snare(), hihat()],     [hihat()] ],
+  [ [hihat()],              [snare(), hihat()] ],
+  [ [drum(), hihat()],      [hihat()] ],
+  [ [hihat()],              [drum(), hihat()] ],
+  [ [snare(), hihat()],     [hihat()] ],
+  [ [hihat()],              [snare(), hihat()] ],
+  [ [drum(), hihat()],      [hihat()] ],
+  [ [hihat()],              [drum(), hihat()] ],
+  [ [snare(), hihat()],     [hihat()] ],
+  [ [hihat()],              [snare(), hihat()] ],
+  [ [drum(), hihat()],      [hihat()] ],
+  [ [hihat()],              [drum(), hihat()] ],
+  [ [snare(), hihat()],     [hihat()] ],
+  [ [crash1(), hihat()],    [snare(), hihat()] ],
+  [ [drum(), hihat()],      [hihat()] ],
+  [ [hihat()],              [crash1(), drum(), hihat()] ],
+  [ [snare(), hihat()],     [hihat()] ],
+  [ [hihat()],              [snare(), hihat()] ],
+  [ [drum(), hihat()],      [hihat()] ],
+  [ [hihat()],              [drum(), hihat()] ],
+  [ [snare(), hihat()],     [hihat()] ],
+  [ [hihat()],              [snare(), hihat()] ],
+  [ [drum(), hihat()],      [hihat()] ],
+  [ [hihat()],              [drum(), hihat()] ],
+  [ [snare(), hihat()],     [hihat()] ],
+  [ [hihat()],              [snare(), hihat()] ],
+  [ [drum(), hihat()],      [hihat()] ],
+  [ [hihat()],              [drum(), hihat()] ],
+  [ [snare(), hihat()],     [hihat()] ],
+  [ [snare(), hihat()],     [snare(), hihat()] ],
+  [ [],                     [] ],
+  [ [],                     [snare(), hihat()] ],
 ];
 var musicInfo2 = {
   beatTime : 60/bpm,
   pieceTime : musicArray2.length*60/bpm,
-  allInstruments : ['piano']
+  allInstruments : ['piano', 'bass', 'elecGuitar', 'drum', 'snare', 'hihat', 'crash1', 'lowTom']
 };
 
 var canvas = document.getElementById('canvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight * 0.9;
 var cav = canvas.getContext('2d');
+cav.save();
+cav.fillStyle = 'black';
 cav.fillRect(0, 0, canvas.width, canvas.height);
-cav.stroke();
+cav.restore();
 
-var keyboard = new Keyboard();
-var myAudio = new MyAudio();
-keyboard.set(canvas, 10, 10, canvas.width / 1.3 - 10, canvas.height / 3 - 10);
+var area = new Area(canvas);
+area.addAreaForTone('bass',
+  {left: 0,
+  top: 4,
+  width: canvas.width / 2,
+  height: canvas.height / 6 - 4});
+
+area.addAreaForTone('piano',
+  {left: 0,
+  top: canvas.height / 6,
+  width: canvas.width / 2,
+  height: canvas.height / 6});
+
+area.addAreaForTone('elecGuitar',
+  {left: 0,
+  top: 2 * canvas.height / 6,
+  width: canvas.width / 2,
+  height: canvas.height / 6});
+
+area.addAreaForDrum(
+  {left: 0,
+  top: 3 * canvas.height / 6,
+  width: canvas.width / 2,
+  height: 3 * canvas.height / 6});
+
+var myAudio = new MyAudio(area);
 
 document.getElementById('play').onclick = function() {
-  myAudio.set(window['musicArray' + 2], window['musicInfo' + 2], keyboard);
+  myAudio.set(window['musicArray' + 2], window['musicInfo' + 2], area);
   myAudio.start();
 }

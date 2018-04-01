@@ -1,8 +1,19 @@
 var trans = {
   'piano' : '0000_Aspirin',
-  'bass' : '0390_Aspirin'
+  'bass' : '0390_Aspirin',
+  'elecGuitar' : '0310_FluidR3_GM',
+  'drum' : '36_6_JCLive',
+  'snare' : '38_6_JCLive',
+  'hihat' : '42_6_JCLive',
+  'lowTom' : '43_6_JCLive',
+  'midTom' : '47_6_JCLive',
+  'highTom' : '50_6_JCLive',
+  'crash1' : '49_6_JCLive',
+  'crash2' : '57_6_JCLive',
+  'ride' : '51_6_JCLive'
 };
-var instrumentsList = ['bass', 'piano'];
+var instrumentsList = ['bass', 'piano', 'elecGuitar'];
+var drums =['drum', 'snare', 'hihat', 'lowTom', 'midTom', 'highTom', 'crash1', 'crash2', 'ride'];
 
 var C2 = 0+12*2, c2 = 1+12*2, D2 = 2+12*2, d2 = 3+12*2, E2 = 4+12*2, F2 = 5+12*2, f2 = 6+12*2, G2 = 7+12*2, g2 = 8+12*2, A2 = 9+12*2, a2 = 10+12*2, B2 = 11+12*2;
 var C3 = 0+12*3, c3 = 1+12*3, D3 = 2+12*3, d3 = 3+12*3, E3 = 4+12*3, F3 = 5+12*3, f3 = 6+12*3, G3 = 7+12*3, g3 = 8+12*3, A3 = 9+12*3, a3 = 10+12*3, B3 = 11+12*3;
@@ -15,4 +26,11 @@ instrumentsList.forEach(function(instrument) {
   window[instrument] = function(pitch, volume) {
     return {timbre:instrument, pitch:pitch||C4, volume:volume||0.5};
   };
+});
+
+drums.forEach(function(drum) {
+  window['currentPlay_' + drum] = new Array();
+  window[drum] = function(volume) {
+    return {pitch: C4, timbre: drum, volume: volume || 0.5};
+  }
 });

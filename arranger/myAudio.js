@@ -1,32 +1,32 @@
-function MyAudio() {
+function MyAudio(area) {
   var that = this;
 
   var started = false, loaded = false;
-  var musicArray, musicInfo, keyboard;
+  var musicArray, musicInfo, area;
   var timer;
   var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
   var audioContext = new AudioContextFunc();
   var player = new WebAudioFontPlayer();
   loadedInstruments = [];
 
-  this.set = function(_musicArray, _musicInfo, _keyboard) {
+  this.set = function(_musicArray, _musicInfo, _area) {
     if(!started) {
       musicArray = _musicArray;
       musicInfo = _musicInfo;
-      keyboard = _keyboard;
+      area = _area;
     }
   }
 
   this.start = function() {
     this.load(0);
-    this.play();
   }
 
   this.load = function(num) {
       if(num == musicInfo.allInstruments.length) {
         that.decodeNewInstruments();
       } else if(loadedInstruments.indexOf(musicInfo.allInstruments[num]) < 0) {
-        that.importScript('../sound/' + trans[musicInfo.allInstruments[num]] + '_sf2_file.js', function() {
+        var forDrum = drums.indexOf(musicInfo.allInstruments[num]) >= 0 ? '128' : '';
+        that.importScript('../sound/' + forDrum + trans[musicInfo.allInstruments[num]] + '_sf2_file.js', function() {
           num++; that.load(num);
         });
       } else {
@@ -38,11 +38,13 @@ function MyAudio() {
     for (var i = 0; i < musicInfo.allInstruments.length; i++) {
       if(!loadedInstruments || loadedInstruments.indexOf(musicInfo.allInstruments[i]) < 0) {
         var label = trans[musicInfo.allInstruments[i]];
-        player.loader.decodeAfterLoading(audioContext, '_tone_' + label + '_sf2_file');
+        var drumOrTone = drums.indexOf(musicInfo.allInstruments[i]) >=0 ? '_drum_' : '_tone_';
+        player.loader.decodeAfterLoading(audioContext, drumOrTone + label + '_sf2_file');
         loadedInstruments[loadedInstruments.length] = musicInfo.allInstruments[i];
       }
     }
     loaded = true;
+    this.play();
   }
 
   this.importScript = function(url, callback) {
@@ -82,20 +84,20 @@ function MyAudio() {
   }
 
   this.playBeat = function(beat) {
+    var drumOrTone;
     if (beat) for (i = 0; i < beat.length; i++) {
-      console.log('currentPlay_' + beat[i].timbre);
-      window['currentPlay_' + beat[i].timbre][beat[i].pitch] =
-        player.queueWaveTable(audioContext, audioContext.destination,
-          window['_tone_' + trans[beat[i].timbre] + '_sf2_file'], 0/*currentTime*/,
-          beat[i].pitch, 100*musicInfo.beatTime, beat[i].volume);
-      keyboard.paintKey(beat[i].pitch, 'click');
+      drumOrTone = drums.indexOf(beat[i].timbre) >= 0 ? '_drum_' : '_tone_';
+      window['currentPlay_' + beat[i].timbre][beat[i].pitch] = player.queueWaveTable(audioContext, audioContext.destination, window[drumOrTone + trans[beat[i].timbre] + '_sf2_file'], 0/*currentTime*/, beat[i].pitch, 100*musicInfo.beatTime, beat[i].volume);
+      if(drumOrTone == '_drum_') area.drum.hitDrum(beat[i].timbre);
+      else area[beat[i].timbre].paintKey(beat[i].pitch, 'click');
     }
   }
 
   this.cancelBeat = function(beat) {
     if(beat) for (var i = 0; i < beat.length; i++) {
       window['currentPlay_' + beat[i].timbre][beat[i].pitch].cancel();
-      keyboard.paintKey(beat[i].pitch, 'release');
+      if(drums.indexOf(beat[i].timbre) >= 0) area.drum.releaseDrum(beat[i].timbre);
+      else area[beat[i].timbre].paintKey(beat[i].pitch, 'release');
     }
   }
 

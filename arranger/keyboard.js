@@ -14,7 +14,7 @@ function Keyboard() {
     '5' : 55, '5#' : 56, '6' : 57, '6#' : 58, '7' : 59
   };
 
-  this.set = function(_canvas, _top, _left, _width, _height, _groupNum) {
+  this.set = function(_canvas, _left, _top,  _width, _height, _groupNum) {
     groupNum = (1 <= _groupNum && _groupNum <= 5) ? _groupNum : 5;
     canvas = _canvas;
     cav = canvas.getContext('2d');
@@ -62,31 +62,6 @@ function Keyboard() {
     cav.stroke();
   }
 
-  this.positionToNote = function(x, y) {
-    if(y < keyboardTop || y > keyBoardBottom) return 0;
-    if(x < keyboardLeft || x > keyBoardRight) return 0;
-
-    var whichGroup = parseInt((x - keyboardLeft) / (groupWidth + intervalWidth)),
-      whichGroupByNote = whichGroup - parseInt(groupNum / 2),
-      groupLeft = keyboardLeft + whichGroup * (groupWidth + intervalWidth),
-      groupLeftOfBlack = groupLeft + keyWidth * (1 - blackWidthRatio / 2);
-
-    if(keyboardTop <= y && y <= keyboardTop+keyHeight*blackHeightRatio) {
-      var xB = (x - groupLeftOfBlack) / keyWidth + 1,
-        xBInt = parseInt(xB),
-        diff = xB - xBInt;
-      if(xBInt != 3 && xBInt < 7 && xBInt > 0 && 0 < diff && diff < blackWidthRatio)
-        return notes[xBInt + '#'] + 12 * whichGroupByNote;
-    }
-    var xW = (x - groupLeft) / keyWidth + 1,
-      xWInt = parseInt(xW);
-    if(xWInt > 0 || xWInt < 8) {
-      return notes[xWInt] + whichGroupByNote * 12;
-    }
-
-    return 0;
-  }
-
   this.noteToRect = function(note) {
     if(!(note >= 24 && note <= 83))return 0;
 
@@ -103,7 +78,6 @@ function Keyboard() {
       return {
         color : 'rgb(0, 0, 0)',
         clickColor : 'rgb(1, 255, 0)',
-        isCenC : false,
         rect : [
           {left : left,
           top : keyboardTop,
@@ -120,7 +94,6 @@ function Keyboard() {
       var retValue = {
         color : 'rgb(255, 255, 255)',
         clickColor : 'rgb(255, 0, 1)',
-        isCenC : false,
         rect : [
           {left : left + 1,
           top : keyboardTop + keyHeight * blackHeightRatio,
@@ -155,28 +128,30 @@ function Keyboard() {
     }
     else if(cOrR == 'release') {
       window.clearInterval(paintKet_click_interval);
+      cav.save();
       var color = area.color;
       cav.fillStyle = color;
       for(var i=0; i<area.rect.length; i++)
         cav.fillRect(area.rect[i].left, area.rect[i].top, area.rect[i].width, area.rect[i].height);
-      cav.stroke();
+      cav.restore();
     }
   }
 
   this.paintKey_click = function(area) {
     var color = area.clickColor, number = 0;
+    cav.save();
 
     paintKet_click_interval = window.setInterval(function() {
       number += 30;
       if(number > 150) {
         window.clearInterval(paintKet_click_interval);
+        cav.restore();
       }
       color = color.replace((number-30).toString(), number.toString());
 
       cav.fillStyle = color;
       for(var i=0; i<area.rect.length; i++)
         cav.fillRect(area.rect[i].left, area.rect[i].top, area.rect[i].width, area.rect[i].height);
-      cav.stroke();
     }, 50);
   }
 }
