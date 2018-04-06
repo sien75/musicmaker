@@ -1,4 +1,4 @@
-function Drum() {
+function Drums() {
   var that = this;
   var body = document.getElementsByTagName('body')[0];
   that.widths = [];
@@ -57,9 +57,5 @@ function Drum() {
       }
       ratio += i;
     }, 20);
-  }
-
-  this.releaseDrum = function() {
-
   }
 }

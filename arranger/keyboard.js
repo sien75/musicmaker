@@ -1,7 +1,7 @@
 function Keyboard() {
   var that = this;
 
-  var canvas, cav,
+  var cav,
     blackHeightRatio, blackWidthRatio, groupIntervalRatio,
     groupNum,
     keyboardTop, keyboardLeft, keyBoardBottom, keyBoardRight,
@@ -14,26 +14,25 @@ function Keyboard() {
     '5' : 55, '5#' : 56, '6' : 57, '6#' : 58, '7' : 59
   };
 
-  this.set = function(_canvas, _left, _top,  _width, _height, _groupNum) {
+  this.set = function(a, _groupNum) {
     groupNum = (1 <= _groupNum && _groupNum <= 5) ? _groupNum : 5;
-    canvas = _canvas;
     cav = canvas.getContext('2d');
     blackHeightRatio = 0.6;
     blackWidthRatio = 0.8;
     groupIntervalRatio = 0.05;
-    keyboardTop = _top;
-    keyboardLeft = _left;
-    keyBoardBottom = _top + _height;
-    keyBoardRight = _left + _width;
-    keyHeight = _height;
-    keyboardWidth = _width;
+    keyboardTop = a.top + a.height * 0.1;
+    keyboardLeft = a.left + a.width * 0.01;
+    keyHeight = a.height * 0.8;
+    keyboardWidth = a.width * 0.8;
+    keyBoardBottom = keyboardTop + keyHeight;
+    keyBoardRight = keyboardLeft + keyboardWidth;
     intervalWidth = keyboardWidth * groupIntervalRatio / groupNum;
     groupWidth = keyboardWidth * (1 - groupIntervalRatio) / groupNum;
     keyWidth = groupWidth / 7;
-    this.createKeyboard();
+    this.initCreateKeyboard();
   }
 
-  this.createKeyboard = function() {
+  this.initCreateKeyboard = function() {
     for(var i = 0; i<groupNum; i++) {
       this.createKeyGroup(keyboardLeft+i*(groupWidth+intervalWidth),
         keyboardLeft+i*(groupWidth+intervalWidth)+groupWidth);
