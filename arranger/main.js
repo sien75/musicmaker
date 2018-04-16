@@ -1,4 +1,4 @@
-var bpm = 120;
+var bpm = 240;
 
 var musicArray = new Array(40);
 var musicInfo = {};

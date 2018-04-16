@@ -39,12 +39,15 @@ function Area() {
     cav.stroke();
   }
 
-  this.operateGrid = function(p) {
+  this.operateGrid = function(p, s) {
     for(grid in that.grids) {
       var m = (p.x - that.grids[grid].left),
         n = (p.y - that.grids[grid].top);
-      if((m > 0 && m < that.grids[grid].width) && (n > 0 && n < that.grids[grid].height))
-        that.grids[grid].gridChange(m, 0, n);
+      if((m > 0 && m < that.grids[grid].width) && (n > 0 && n < that.grids[grid].height)) {
+        if(s == 'click') that.grids[grid].gridChange(m, n);
+        else if(s == 'move') that.grids[grid].gridChangeExtend(m, n);
+        return;
+      }
     }
   }
 

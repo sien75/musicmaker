@@ -5,8 +5,18 @@ document.getElementById('play').onclick = function() {
 }
 
 canvas.onmousedown = function(e) {
-  var pos = getPos(e);
-  area.operateGrid(pos);
+  window['ifDown'] = true;
+  area.operateGrid(getPos(e), 'click');
+}
+
+document.getElementsByTagName('body')[0].onmouseup = function() {
+  window['ifDown'] = false;
+}
+
+canvas.onmousemove = function(e) {
+  if(window['ifDown']) {
+    area.operateGrid(getPos(e), 'move');
+  }
 }
 
 function getPos(e) {
