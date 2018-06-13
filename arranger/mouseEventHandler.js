@@ -2,11 +2,13 @@ document.getElementById('play').onclick = function() {
   initMusicArray();
   area.operateMusicArrayAndMusicInfo();
   myAudio.start();
+  for(var grid in area.grids)grid.timeBar.start();
 }
 
 canvas.onmousedown = function(e) {
   window['ifDown'] = true;
   area.operateGrid(getPos(e), 'click');
+  area.operateHeader(getPos(e));
 }
 
 document.getElementsByTagName('body')[0].onmouseup = function() {
@@ -17,6 +19,7 @@ canvas.onmousemove = function(e) {
   if(window['ifDown']) {
     area.operateGrid(getPos(e), 'move');
   }
+  else if(1);
 }
 
 function getPos(e) {

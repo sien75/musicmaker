@@ -2,19 +2,19 @@ function Area() {
   var that = this;
   this.grids = {};
 
-  this.addAreaForTone = function(instrument, type, a) {
+  this.addAreaForTone = function(name, instrument, type, musicScore, a) {
     if(type == 'grid') {
-      that.addGrids(instrument, a);
+      that.addGrids(name, instrument, musicScore, a);
     } else {
-      that[instrument] = new Keyboard();
-      that[instrument].set(a, 5);
+      that[name] = new Keyboard();
+      that[name].set(a, 5);
     }
     that.drawOutline(a);
   }
 
-  this.addAreaForDrum = function(type, a) {
+  this.addAreaForDrum = function(type, musicScore, a) {
     if(type == 'grid') {
-      that.addGrids('drums', a);
+      that.addGrids('drums', 'drums', musicScore, a);
     } else {
       that.drums = new Drums();
       that.drums.set(a);
@@ -22,9 +22,9 @@ function Area() {
     that.drawOutline(a);
   }
 
-  this.addGrids = function(instrument, a) {
-    that.grids[instrument] = that[instrument] = new Grid();
-    that[instrument].set(canvas, a, instrument);
+  this.addGrids = function(name, instrument, musicScore, a) {
+    that.grids[name] = that[name] = new Grid();
+    that[name].set(instrument, musicScore, a);
   }
 
   this.drawOutline = function(a) {
@@ -47,6 +47,16 @@ function Area() {
         if(s == 'click') that.grids[grid].gridChange(m, n);
         else if(s == 'move') that.grids[grid].gridChangeExtend(m, n);
         return;
+      }
+    }
+  }
+
+  this.operateHeader = function(p, s) {
+    for(grid in that.grids) {
+      var m = (p.x - that.grids[grid].left),
+        n = (p.y - that.grids[grid].top);
+      if (n < 0 && n > (-0.8 * that.grids[grid].header) && (m > 0 && m < that.grids[grid].width)) {
+        that.grids[grid].attrChange.click(m);
       }
     }
   }

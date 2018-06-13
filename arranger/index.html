@@ -6,6 +6,7 @@
 	</head>
 	<body style="user-select:none; margin:0; overflow:hidden; background:#222;
 	font-family:'Lucida Console',Monaco,monospace">
+
 		<div style="margin-bottom:5px; height:45px" id="header">
 			<span style="font-size:25px; color:#888; display:inline-block; margin:4px 0 0 5px;
 			border:3px solid; border-radius:5px">MusicMaker</span>
@@ -14,14 +15,20 @@
 			<a href="../liveplay/index.html" style="float:right; color:#888; margin-top:20px">switch to liveplay</a>
 		</div>
 		<canvas id="canvas" style="position:absolute"></canvas>
+
 		<script type="text/javascript" src="../browser.js"></script>
 		<script type="text/javascript" src="../webAudiofontPlayer.js"></script>
 		<script type="text/javascript" src="mouseEventHandler.js"></script>
 		<script type="text/javascript" src="storage.js"></script>
+
+		<script type="text/javascript" src="extends/attrChange.js"></script>
+		<script type="text/javascript" src="extends/timeBar.js"></script>
+
 		<script type="text/javascript" src="drums.js"></script>
-		<script type="text/javascript" src="gridWhenPlay.js"></script>
 		<script type="text/javascript" src="keyboard.js"></script>
+		<script type="text/javascript" src="drawGrid.js"></script>
 		<script type="text/javascript" src="grid.js"></script>
+
 		<script type="text/javascript" src="area.js"></script>
 		<script type="text/javascript" src="myAudio.js"></script>
 		<script type="text/javascript" src="main.js"></script>

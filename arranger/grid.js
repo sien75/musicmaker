@@ -1,54 +1,35 @@
 function Grid() {
-  var that = this, ctx,
+  var that = this, ctx = canvas.getContext('2d'),
     instrument,
     drumToFillFull,
-    noteRecord = new Array(32);
+    noteRecord,
+    attrArray = new Array();
+  this.dg = new DrawGrid();
+  this.timeBar = new TimeBar();
+  this.attrChange = new AttrChange();
 
-  this.set = function(canvas, a, _instrument) {
-    ctx = canvas.getContext('2d'); instrument = _instrument;
-    that.left = a.left + 5; that.top = a.top + 7;
-    that.width = a.width * 0.8 - 5; that.height = a.height - 16;
+  this.set = function(_instrument, musicScore, a) {
+    noteRecord = musicScore;
+    instrument = _instrument;
+
     if(instrument == 'drums') {
       drumToFillFull = [0, 1];
       for(var i = 0; i < noteRecord.length; i++) noteRecord[i] = new Array();
+      this.attrChange.set('isDrum', that.singleW, attrArray);
     } else {
       drumToFillFull = [0.25, 0.5];
       for(var i = 0; i < noteRecord.length; i++) noteRecord[i] = -1;
+      this.attrChange.set('isNotDrum', that.singleW, attrArray);
     }
-    that.initLine();
-  }
-//初始化可以调用gridWhenplay///////////////////////////////
-  this.initLine = function() {
+
+    that.header = a.height * 0.07;
+    that.left = a.left + 5; that.top = a.top + that.header;
+    that.width = a.width * 0.8 - 5; that.height = a.height * 0.97 - that.header;
     that.singleH = that.height / 21,
     that.singleW = that.width / 32;
-    that.lineHorizontal();
-    that.lineVertical();
-  }
 
-  this.lineHorizontal = function() {
-    var c = ctx, h = that.singleH;
-    c.beginPath(); c.strokeStyle = '#aaa';
-    for (var i = 0; i < 22; i++) {
-      c.moveTo(that.left, that.top + i * h);
-      c.lineTo(that.left + that.width, that.top + i * h);
-    }
-    c.stroke();
-    c.beginPath(); c.strokeStyle = '#eee';
-    for (var i = 0; i < 4; i++) {
-      c.moveTo(that.left, that.top + i * h * 7);
-      c.lineTo(that.left + that.width, that.top + i * h * 7);
-    }
-    c.stroke();
-  }
-
-  this.lineVertical = function() {
-    var c = ctx, w = that.singleW;
-    c.beginPath(); c.strokeStyle = '#aaa';
-    for (var i = 0; i < 33; i++) {
-      c.moveTo(that.left + i * w, that.top);
-      c.lineTo(that.left + i * w, that.top + that.height);
-    }
-    c.stroke();
+    this.dg.set(ctx, that.left, that.top, that.width, that.height, that.singleH, that.singleW);
+    this.timeBar.set(that.left, that.top, that.width, that.height);
   }
 
   this.gridChange = function(x, y) {
@@ -149,10 +130,16 @@ function Grid() {
   }
 
   this.addElementsToMusicArray = function() {
+    var oct, vol;
+
     if(instrument == 'drums') {
-      for (var i = 0; i < noteRecord.length; i++) for (var j = 0; j < noteRecord[i].length; j++) {
-        musicArray[i][0].push(window[instrument]( transfer(noteRecord[i][j]) ));
-        musicArray[i + 1][1].push(window[instrument]( transfer(noteRecord[i][j]) ));
+      for (var i = 0; i < noteRecord.length; i++) {
+        oct = that.attrChange.get('octive'),
+        vol = that.attrChange.get('volume');
+        for (var j = 0; j < noteRecord[i].length; j++) {
+          musicArray[i][0].push(window[instrument]( transfer(noteRecord[i][j]) + 12 * oct, vol ));
+          musicArray[i + 1][1].push(window[instrument]( transfer(noteRecord[i][j]) + 12 * oct, vol ));
+        }
       }
     }
 
@@ -185,6 +172,3 @@ function Grid() {
   }
 
 }
-[
-  [ [], [] ]
-]

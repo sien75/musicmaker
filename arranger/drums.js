@@ -1,6 +1,5 @@
 function Drums() {
   var that = this;
-  var body = document.getElementsByTagName('body')[0];
   that.widths = [];
   that.heights = [];
 
