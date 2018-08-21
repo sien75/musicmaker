@@ -12,25 +12,32 @@
 			border:3px solid; border-radius:5px">MusicMaker</span>
 			<span style="font-size:28px; display:inline-block; color:#888; margin:6px 20px 0 0;">Arranger</span>
 			<button type="button" name="button" id="play">play</button>
+			<button type="button" name="button" id="return">return</button>
 			<a href="../liveplay/index.html" style="float:right; color:#888; margin-top:20px">switch to liveplay</a>
 		</div>
-		<canvas id="canvas" style="position:absolute"></canvas>
 
+		<canvas id="canvas" style="position:absolute; z-index:1"></canvas>
+
+		<!--bottom part files-->
 		<script type="text/javascript" src="../browser.js"></script>
 		<script type="text/javascript" src="../webAudiofontPlayer.js"></script>
-		<script type="text/javascript" src="mouseEventHandler.js"></script>
 		<script type="text/javascript" src="storage.js"></script>
 
-		<script type="text/javascript" src="extends/attrChange.js"></script>
-		<script type="text/javascript" src="extends/timeBar.js"></script>
-
-		<script type="text/javascript" src="drums.js"></script>
-		<script type="text/javascript" src="keyboard.js"></script>
-		<script type="text/javascript" src="drawGrid.js"></script>
-		<script type="text/javascript" src="grid.js"></script>
-
+		<!--graphic section files-->
+		<script type="text/javascript" src="graphic/drums.js"></script>
+		<script type="text/javascript" src="graphic/keyboard.js"></script>
+		<script type="text/javascript" src="graphic/grid/colorPart.js"></script>
+		<script type="text/javascript" src="graphic/grid/logicPart.js"></script>
+		<script type="text/javascript" src="graphic/grid/grid.js"></script>
 		<script type="text/javascript" src="area.js"></script>
+
+		<!-- sound section files-->
 		<script type="text/javascript" src="myAudio.js"></script>
+
+		<!--the main js file-->
 		<script type="text/javascript" src="main.js"></script>
+
+		<!--event handler file-->
+		<script type="text/javascript" src="mouseEventHandler.js"></script>
 	</body>
 </html>

@@ -4,54 +4,44 @@ function Area() {
 
   this.addAreaForTone = function(name, instrument, type, musicScore, a) {
     if(type == 'grid') {
-      that.addGrids(name, instrument, musicScore, a);
+      that.grids[name] = that[name] = new Grid();
+      that[name].set(instrument, musicScore, a);
     } else {
       that[name] = new Keyboard();
       that[name].set(a, 5);
     }
-    that.drawOutline(a);
   }
 
-  this.addAreaForDrum = function(type, musicScore, a) {
+  this.addAreaForDrum = function(name, type, musicScore, a) {
     if(type == 'grid') {
-      that.addGrids('drums', 'drums', musicScore, a);
+      that.grids[name] = that[name] = new Grid();
+      that[name].set('drums', musicScore, a);
     } else {
-      that.drums = new Drums();
-      that.drums.set(a);
+      that[name] = new Drums();
+      that[name].set(a);
     }
-    that.drawOutline(a);
   }
 
-  this.addGrids = function(name, instrument, musicScore, a) {
-    that.grids[name] = that[name] = new Grid();
-    that[name].set(instrument, musicScore, a);
+  this.alterArea = function() {
+
   }
 
-  this.drawOutline = function(a) {
-    var cav = canvas.getContext('2d');
-    cav.strokeStyle = 'rgb(200, 200, 200)';
-    cav.beginPath();
-    cav.moveTo(a.left + 2, a.top + 2);
-    cav.lineTo(a.left + a.width - 4, a.top + 2);
-    cav.lineTo(a.left + a.width - 4, a.top + a.height - 4);
-    cav.lineTo(a.left + 2, a.top + a.height - 4);
-    cav.closePath();
-    cav.stroke();
-  }
-
-  this.operateGrid = function(p, s) {
+  this.operateGrid = function(s, e, state) {
     for(grid in that.grids) {
-      var m = (p.x - that.grids[grid].left),
-        n = (p.y - that.grids[grid].top);
-      if((m > 0 && m < that.grids[grid].width) && (n > 0 && n < that.grids[grid].height)) {
-        if(s == 'click') that.grids[grid].gridChange(m, n);
-        else if(s == 'move') that.grids[grid].gridChangeExtend(m, n);
+      var x1 = (s.x - that.grids[grid].position.left),
+        y1 = (s.y - that.grids[grid].position.top),
+        x2 = (e.x - that.grids[grid].position.left);
+      if((x1 > 0 && x1 < that.grids[grid].position.width)
+      && (y1 > 0 && y1 < that.grids[grid].position.height)
+      && (x2 > 0 && x2 < that.grids[grid].position.width)) {
+        if(state == 'move' || state == 'start') that.grids[grid].paintColor(y1, x1, x2, state);
+        else if(state == 'stop') that.grids[grid].gridLogic(y1, x1, x2);
         return;
       }
     }
   }
 
-  this.operateHeader = function(p, s) {
+  /*this.operateHeader = function(p, s) {
     for(grid in that.grids) {
       var m = (p.x - that.grids[grid].left),
         n = (p.y - that.grids[grid].top);
@@ -67,5 +57,5 @@ function Area() {
       that.grids[grid].changeNoteLengthInMusicInfo();
       that.grids[grid].addInstrumentsInMusicInfo();
     }
-  }
+  }*/
 }

@@ -1,7 +1,7 @@
 var bpm = 240;
 var body = document.getElementsByTagName('body')[0];
 
-var musicArray = new Array(40);
+var musicArray = new Array(40);//used to storage music score
 var musicInfo = {};
 function initMusicArray() {
   for(var ii=0; ii < musicArray.length; ii++) {
@@ -24,29 +24,28 @@ cav.fillRect(0, 0, canvas.width, canvas.height);
 
 var area = new Area();
 var musicScore = new Array();
-for(var p = 0; p < 4; p++) musicScore[p] = new Array(32);
-area.addAreaForTone('piano', 'piano', 'grid', musicScore[0],
-  {left: 5,
-  top: 5,
-  width: 7 * canvas.width / 15 - 5,
-  height: canvas.height / 2 - 5});
+//for(var p = 0; p < 3; p++) musicScore[p] = new Array();
 
-area.addAreaForTone('bass', 'bass', 'grid', musicScore[1],
-  {left: 7 * canvas.width / 15 + 5,
-  top: 5,
-  width: 7 * canvas.width / 15 - 5,
-  height: canvas.height / 2 - 5});
+function addAreas(position_x, position_y, size) {
+  area.addAreaForTone('piano', 'piano', 'grid', musicScore[0],
+    {left: 4 + position_x,
+    top: 4 + position_y,
+    width: canvas.width * size - 8,
+    height: canvas.height * size - 8});
 
-area.addAreaForDrum('grid', musicScore[2],
-  {left: 5,
-  top: canvas.height / 2 + 5,
-  width: 7 * canvas.width / 15 - 5,
-  height: canvas.height / 2 - 5});
+  area.addAreaForTone('bass', 'bass', 'grid', musicScore[1],
+    {left: 4 + position_x,
+    top: canvas.height *size + 4 + position_y,
+    width: canvas.width * size - 8,
+    height: canvas.height * size - 8});
 
-area.addAreaForTone('elecGuitar', 'elecGuitar', 'grid', musicScore[3],
-  {left: 7 * canvas.width / 15 + 5,
-  top: canvas.height / 2 + 5,
-  width: 7 * canvas.width / 15 - 5,
-  height: canvas.height / 2 - 5});
+  area.addAreaForTone('elecGuitar', 'elecGuitar', 'grid', musicScore[2],
+    {left: 4 + position_x,
+    top: 2 * canvas.height * size + 4 + position_y,
+    width: canvas.width * size - 8,
+    height: canvas.height * size - 8});
+}
+
+addAreas(0, 0, 1);
 
 var myAudio = new MyAudio();
