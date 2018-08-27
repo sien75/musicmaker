@@ -1,29 +1,31 @@
-function Area() {
+function Graphic() {
   var that = this;
-  this.grids = {};
+  this.grids = [];
+  this.others = [];
 
-  this.addAreaForTone = function(name, instrument, type, musicScore, a) {
+  this.addGraphicForTone = function(label, instrument, type, musicScore, position) {
     if(type == 'grid') {
-      that.grids[name] = that[name] = new Grid();
-      that[name].set(instrument, musicScore, a);
+      that.grids[label]= new Grid();
+      that.grids[label].set(instrument, musicScore, position);
     } else {
-      that[name] = new Keyboard();
-      that[name].set(a, 5);
+      that.others[label] = new Keyboard();
+      that.others[label].set(position, 5);
     }
   }
 
-  this.addAreaForDrum = function(name, type, musicScore, a) {
+  this.addGraphicForDrum = function(label, type, musicScore, position) {
     if(type == 'grid') {
-      that.grids[name] = that[name] = new Grid();
-      that[name].set('drums', musicScore, a);
+      that.grids[label] = new Grid();
+      that.grids[label].set('drums', musicScore, position);
     } else {
-      that[name] = new Drums();
-      that[name].set(a);
+      that.others[label] = new Drums();
+      that.others[label].set(position);
     }
   }
 
-  this.alterArea = function() {
-
+  this.alterGraphic = function(label, part, newDetail) {
+    if(that.grids[label] != null && (part == 'instrument' || part == 'musicScore' || part == 'position'))
+      that.grids[label].alter(part, newDetail);
   }
 
   this.operateGrid = function(s, e, state) {
@@ -50,12 +52,5 @@ function Area() {
       }
     }
   }
-
-  this.operateMusicArrayAndMusicInfo = function() {
-    for(grid in that.grids) {
-      that.grids[grid].addElementsToMusicArray();
-      that.grids[grid].changeNoteLengthInMusicInfo();
-      that.grids[grid].addInstrumentsInMusicInfo();
-    }
   }*/
 }

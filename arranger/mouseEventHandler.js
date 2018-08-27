@@ -2,9 +2,7 @@ this.posChange = {x : 0, y : 0};
 this.scale_gain = 1;
 
 document.getElementById('play').onclick = function() {
-  initMusicArray();
-  //area.operateMusicArrayAndMusicInfo();
-  myAudio.start();
+  player.play();
 }
 
 document.getElementById('return').onclick = function() {
@@ -25,7 +23,7 @@ canvas.onmousedown = function(e) {
   else {
     window['ifLeftDown'] = true;
     window['leftDownPos'] = getPos(e);
-    area.operateGrid(window['leftDownPos'], getPos(e), 'start');
+    graphic.operateGrid(window['leftDownPos'], getPos(e), 'start');
   }
 }
 
@@ -35,7 +33,7 @@ canvas.onmouseup = function(e) {
   }
   else {
     window['ifLeftDown'] = false;
-    area.operateGrid(window['leftDownPos'], getPos(e), 'stop');
+    graphic.operateGrid(window['leftDownPos'], getPos(e), 'stop');
   }
 }
 
@@ -48,7 +46,7 @@ canvas.onmousemove = function(e) {
     rePaint();
   }
   else if(window['ifLeftDown']) {
-    area.operateGrid(window['leftDownPos'], getPos(e), 'move');
+    graphic.operateGrid(window['leftDownPos'], getPos(e), 'move');
   }
 }
 
@@ -77,7 +75,9 @@ function scrollFunc(e) {
 
 function rePaint() {
   cav.fillStyle = 'black';cav.fillRect(0, 0, canvas.width, canvas.height);
-  addAreas(window['posChange'].x, window['posChange'].y, window['scale_gain']);
+  for(var i = 0; i < numOfGraphics; i++)
+    graphic.alterGraphic(i, 'position', mainPositions(0, i * canvas.height * window['scale_gain'],
+      canvas.width, canvas.height, [window['posChange'].x, window['posChange'].y, window['scale_gain']]) );
 }
 
 function getPos(e) {

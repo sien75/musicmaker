@@ -1,19 +1,17 @@
-var bpm = 240;
+var bpm = 180;
 var body = document.getElementsByTagName('body')[0];
+var numOfGraphics = 0;
+var gColumns = 32, gRows = 36;
 
-var musicArray = new Array(40);//used to storage music score
-var musicInfo = {};
-function initMusicArray() {
-  for(var ii=0; ii < musicArray.length; ii++) {
-    musicArray[ii] = new Array(2);
-    musicArray[ii][0] = new Array();
-    musicArray[ii][1] = new Array();
-  }
-  musicInfo.beatTime = 60 / bpm;
-  musicInfo.pieceLength = 0;
-  musicInfo.allInstruments = [];
+var musicScore = new Array();//used to storage music score
+for(var pq = 0; pq < 3; pq++) {
+  musicScore[pq] = new Array(gRows * gColumns);
+  for(var qp = 0; qp < gRows * gColumns; qp++) musicScore[pq][qp] = 0;
 }
-initMusicArray();
+var musicInfo = {};
+musicInfo.beatTime = 60 / bpm;
+musicInfo.pieceLength = 0;
+musicInfo.allInstruments = ['piano', 'bass', 'drums'];
 
 var canvas = document.getElementById('canvas');
 canvas.width = window.innerWidth;
@@ -22,30 +20,32 @@ var cav = canvas.getContext('2d');
 cav.fillStyle = 'black';
 cav.fillRect(0, 0, canvas.width, canvas.height);
 
-var area = new Area();
-var musicScore = new Array();
-//for(var p = 0; p < 3; p++) musicScore[p] = new Array();
+var graphic = new Graphic();
 
-function addAreas(position_x, position_y, size) {
-  area.addAreaForTone('piano', 'piano', 'grid', musicScore[0],
-    {left: 4 + position_x,
-    top: 4 + position_y,
-    width: canvas.width * size - 8,
-    height: canvas.height * size - 8});
-
-  area.addAreaForTone('bass', 'bass', 'grid', musicScore[1],
-    {left: 4 + position_x,
-    top: canvas.height *size + 4 + position_y,
-    width: canvas.width * size - 8,
-    height: canvas.height * size - 8});
-
-  area.addAreaForTone('elecGuitar', 'elecGuitar', 'grid', musicScore[2],
-    {left: 4 + position_x,
-    top: 2 * canvas.height * size + 4 + position_y,
-    width: canvas.width * size - 8,
-    height: canvas.height * size - 8});
+function mainPositions(baseL, baseT, baseW, baseH, changes) {
+  return {
+      left : baseL + changes[0] + 4,
+      top : baseT + changes[1] + 4,
+      width : baseW * changes[2] - 8,
+      height : baseH * changes[2] - 8
+    };
 }
 
-addAreas(0, 0, 1);
+function addGraphics() {
+  var label = 0;
+  graphic.addGraphicForTone(label, musicInfo.allInstruments[label], 'grid', musicScore[label],
+    mainPositions(0, 0, canvas.width, canvas.height, [0,0,1]) );
+  label++;
+  graphic.addGraphicForTone(label, musicInfo.allInstruments[label], 'grid', musicScore[label],
+    mainPositions(0, canvas.height, canvas.width, canvas.height, [0,0,1]) );
+  label++;
+  graphic.addGraphicForTone(label, musicInfo.allInstruments[label], 'grid', musicScore[label],
+    mainPositions(0, 2 * canvas.height, canvas.width, canvas.height, [0,0,1]) );
+  numOfGraphics = label + 1;
+}
 
-var myAudio = new MyAudio();
+addGraphics();
+
+var audio = new Audio();
+
+var player = new Player();

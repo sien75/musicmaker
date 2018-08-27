@@ -17,13 +17,13 @@ function LogicPart() {
       }
     }
     else {
-      var jj = 0;
-      while(ms[y*c + x1 + jj] != 0) {
+      ms[y*c + x1] = 0;
+      var jj = 1;
+      while(ms[y*c + x1 + jj] == 2) {
         ms[y*c + x1 + jj] = 0;
         jj++;
       }
     }
-    console.log(ms);
   }
 
 }
