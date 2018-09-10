@@ -43,7 +43,9 @@ function Grid() {
   this.drawGrid = function(pos, rows, cols, sW, sH) {
     cav.beginPath();
     cav.fillStyle = 'rgb(25, 25, 25)';
-    var lightColors = [1,3,5,8,10,13,15,17,20,22,25,27,29,32,34];
+    var lightColors = new Array();
+    for(var g = 0; g <= parseInt((rows-1) / 12); g++)
+      [1, 3, 6, 8, 10].forEach(function(num){if(rows-1-num-g*12>=0)lightColors=lightColors.concat(rows-1-num-g*12);});
     for(h in lightColors)
       cav.rect(pos.left, pos.top + lightColors[h] * sH, sW * cols, sH);
     cav.fill();
@@ -72,13 +74,13 @@ function Grid() {
 
     cav.beginPath();
     cav.strokeStyle = 'rgb(150, 150, 150)';
-    for (var j = 4; j < cols + 1 - 4; j+=4) {
-      cav.moveTo(pos.left + j * sW, pos.top);
-      cav.lineTo(pos.left + j * sW, pos.top + pos.height);
+    for (var k = 4; k < cols + 1 - 4; k+=4) {
+      cav.moveTo(pos.left + k * sW, pos.top);
+      cav.lineTo(pos.left + k * sW, pos.top + pos.height);
     }
-    for (var i = 12; i < rows; i+=12) {
-      cav.moveTo(pos.left, pos.top + sH * i);
-      cav.lineTo(pos.left + sW * cols, pos.top + sH * i);
+    for (var l = rows - 12; l >= 0; l-=12) {
+      cav.moveTo(pos.left, pos.top + sH * l);
+      cav.lineTo(pos.left + sW * cols, pos.top + sH * l);
     }
     cav.stroke();
   }

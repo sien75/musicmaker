@@ -1,7 +1,8 @@
 var bpm = 180;
 var body = document.getElementsByTagName('body')[0];
+var header = document.getElementById('header');
 var numOfGraphics = 0;
-var gColumns = 32, gRows = 36;
+var gColumns = 32, gRows = 12;
 
 var musicScore = new Array();//used to storage music score
 for(var pq = 0; pq < 3; pq++) {
@@ -15,7 +16,7 @@ musicInfo.allInstruments = ['piano', 'bass', 'drums'];
 
 var canvas = document.getElementById('canvas');
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight * 0.9;
+canvas.height = window.innerHeight * 0.95 - 45;
 var cav = canvas.getContext('2d');
 cav.fillStyle = 'black';
 cav.fillRect(0, 0, canvas.width, canvas.height);
@@ -47,5 +48,7 @@ function addGraphics() {
 addGraphics();
 
 var audio = new Audio();
+
+var setting = new Setting();
 
 var player = new Player();

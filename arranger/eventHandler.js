@@ -11,6 +11,10 @@ document.getElementById('return').onclick = function() {
   rePaint();
 }
 
+document.getElementById('setting').onclick = function() {
+  setting.set();
+}
+
 body.oncontextmenu = function(e) {
   e.preventDefault();
 }

@@ -7,7 +7,7 @@ function Audio() {
   var _allInstruments = (function() {
       var ma = musicInfo.allInstruments, dr = ma.indexOf('drums');
       return dr >= 0 ? ma.slice(0, dr).concat(ma.slice(dr + 1, ma.length)).concat(drumContent) : ma;
-    })();console.log(_allInstruments);
+    })();
   loadedInstruments = [];
 
   this.load = function(num, t) {
