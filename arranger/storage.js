@@ -12,7 +12,7 @@ var trans = {
   'crash2' : '57_6_JCLive',
   'ride' : '51_6_JCLive'
 };
-var instrumentsList = ['bass', 'piano', 'elecGuitar'];
+var instrumentsList = ['piano', 'bass', 'elecGuitar'];
 var drumContent =['drum', 'snare', 'hihat', 'lowTom', 'midTom', 'highTom', 'crash1', 'crash2', 'ride'];
 
 var C2 = 0+12*2, c2 = 1+12*2, D2 = 2+12*2, d2 = 3+12*2, E2 = 4+12*2, F2 = 5+12*2, f2 = 6+12*2, G2 = 7+12*2, g2 = 8+12*2, A2 = 9+12*2, a2 = 10+12*2, B2 = 11+12*2;

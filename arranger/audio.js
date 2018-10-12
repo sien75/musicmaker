@@ -4,10 +4,12 @@ function Audio() {
   var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
   var audioContext = new AudioContextFunc();
   var wafplayer = new WebAudioFontPlayer();
-  var _allInstruments = (function() {
-      var ma = musicInfo.allInstruments, dr = ma.indexOf('drums');
-      return dr >= 0 ? ma.slice(0, dr).concat(ma.slice(dr + 1, ma.length)).concat(drumContent) : ma;
-    })();
+  var _allInstruments;
+  this.getAllInstruments = function() {
+    var ma = musicInfo.allInstruments, dr = ma.indexOf('drums');
+    _allInstruments =  dr >= 0 ?
+      ma.slice(0, dr).concat(ma.slice(dr + 1, ma.length)).concat(drumContent) : ma;
+  }
   loadedInstruments = [];
 
   this.load = function(num, t) {

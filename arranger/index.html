@@ -12,16 +12,16 @@
 			border:3px solid; border-radius:5px">MusicMaker</span>
 			<span style="font-size:28px; display:inline-block; color:rgb(255,83,77); margin:6px 20px 0 0;">Arranger</span>
 			<button type="button" name="button" id="play">play</button>
-			<button type="button" name="button" id="return">return</button>
 			<button type="button" name="button" id="setting">setting</button>
 			<a href="../liveplay/index.html" style="float:right; color:#888; margin-top:20px">switch to liveplay</a>
 		</div>
 
 		<canvas id="canvas" style="position:absolute; z-index:1"></canvas>
-		<div style="position:absolute; top:30%; left:30%; width:40%; height:40%; z-index:20;
-			border-radius:10%; background:rgba(37, 198, 252, 0.8); " id="setting">
-			<div style="position:absolute; left:20%; top:20%; width:30%" id="noa">number of areas</div>
-			<div style="position:absolute; left:20%; top:20%; width:30%"//吧这些诺到js文件里
+
+		<div style="position:absolute; z-index:20; display:none" id="settingOutline">
+			<div style="position:absolute; top:30%; left:30%; width:40%; height:40%;
+		  	border-radius:10%; background:rgba(37, 198, 252, 0.8); display:block" id="settingInner">
+			</div>
 		</div>
 
 		<!--bottom part files-->
@@ -37,15 +37,16 @@
 		<script type="text/javascript" src="graphic/grid/grid.js"></script>
 		<script type="text/javascript" src="graphic/graphic.js"></script>
 
-		<!-- sound section files-->
+		<!--sound section files-->
 		<script type="text/javascript" src="audio.js"></script>
 
-		<!--the main js file-->
+		<!--the main js files-->
 		<script type="text/javascript" src="setting.js"></script>
-		<script type="text/javascript" src="player.js"></script>
+		<script type="text/javascript" src="player.js">sRemove</script>
 		<script type="text/javascript" src="main.js"></script>
 
 		<!--event handler file-->
+		<script type="text/javascript" src="settingEventHandler.js"></script>
 		<script type="text/javascript" src="eventHandler.js"></script>
 	</body>
 </html>

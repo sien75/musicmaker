@@ -5,14 +5,8 @@ document.getElementById('play').onclick = function() {
   player.play();
 }
 
-document.getElementById('return').onclick = function() {
-  window['posChange'].x = window['posChange'].y = 0;
-  window.scale_gain = 1;
-  rePaint();
-}
-
 document.getElementById('setting').onclick = function() {
-  setting.set();
+  setting.showSetting(-1);
 }
 
 body.oncontextmenu = function(e) {
@@ -77,16 +71,14 @@ function scrollFunc(e) {
   rePaint();
 }
 
-function rePaint() {
-  cav.fillStyle = 'black';cav.fillRect(0, 0, canvas.width, canvas.height);
-  for(var i = 0; i < numOfGraphics; i++)
-    graphic.alterGraphic(i, 'position', mainPositions(0, i * canvas.height * window['scale_gain'],
-      canvas.width, canvas.height, [window['posChange'].x, window['posChange'].y, window['scale_gain']]) );
-}
-
 function getPos(e) {
   var bbox = canvas.getBoundingClientRect(),
     x = e.clientX - bbox.left * (canvas.width / bbox.width),
     y = e.clientY - bbox.top * (canvas.height / bbox.height);
     return {x : x, y : y};
+}
+
+window.onresize = function() {
+  //add setting font size change
+  //add canvas size change
 }
