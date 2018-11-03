@@ -5,15 +5,17 @@
 		<title>Arranger 编曲</title>
 	</head>
 	<body style="user-select:none; margin:0; overflow:hidden; background:#222;
-	font-family:'Lucida Console',Monaco,monospace">
+	font-family:'Lucida Console',Monaco,monospace; user-select:none">
 
 		<div style="margin-bottom:5px; height:45px" id="header">
-			<span style="font-size:25px; color:rgb(237,208,190); display:inline-block; margin:4px 0 0 5px;
+		  <span style="font-size:25px; color:rgb(237,208,190); display:inline-block; margin:4px 0 0 5px;
 			border:3px solid; border-radius:5px">MusicMaker</span>
 			<span style="font-size:28px; display:inline-block; color:rgb(255,83,77); margin:6px 20px 0 0;">Arranger</span>
 			<button type="button" name="button" id="play">play</button>
 			<button type="button" name="button" id="setting">setting</button>
-			<a href="../liveplay/index.html" style="float:right; color:#888; margin-top:20px">switch to liveplay</a>
+			<input type="file" id="upload" style="display:none">
+      <button type="button" id="uploadbutton" onclick="upload.click()">upload</button>
+			<button type="button" id="download">download</button>
 		</div>
 
 		<canvas id="canvas" style="position:absolute; z-index:1"></canvas>
@@ -48,5 +50,10 @@
 		<!--event handler file-->
 		<script type="text/javascript" src="settingEventHandler.js"></script>
 		<script type="text/javascript" src="eventHandler.js"></script>
+
+		<!--upload and download-->
+		<script type="text/javascript" src="upload.js"></script>
+		<script type="text/javascript" src="download.js"></script>
+
 	</body>
 </html>

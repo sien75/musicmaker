@@ -34,10 +34,10 @@ function mainPositions(baseL, baseT, baseW, baseH, changes) {
     };
 }
 
-function addGraphics() {
+function paint() {
   var label = 0, totalHeight = 0;
   for(; label < numOfGraphics; label++) {
-    graphic.addGraphicForTone(label, 'grid', musicScore[label],
+    graphic.addGraphic(label, 'grid', musicScore[label],
       mainPositions(0, totalHeight, canvas.width, (canvas.height-14)*gRows[label]/gRows[0]+14, [0,0,1]) );
     totalHeight += (canvas.height - 14) * gRows[label] / gRows[0] + 14;
   }
@@ -55,7 +55,7 @@ function rePaint() {
   }
 }
 
-addGraphics();
+paint();
 
 var audio = new Audio();
 

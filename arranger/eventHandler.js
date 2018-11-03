@@ -13,6 +13,10 @@ body.oncontextmenu = function(e) {
   e.preventDefault();
 }
 
+body.onselectstart = function(e) {
+  e.preventDefault();
+}
+
 canvas.onmousedown = function(e) {
   if(e.button == 2) {
     window['ifRightDown'] = true;
@@ -29,7 +33,7 @@ canvas.onmouseup = function(e) {
   if(e.button == 2) {
     window['ifRightDown'] = false;
   }
-  else {
+  else if(window['ifLeftDown']){
     window['ifLeftDown'] = false;
     graphic.operateGrid(window['leftDownPos'], getPos(e), 'stop');
   }

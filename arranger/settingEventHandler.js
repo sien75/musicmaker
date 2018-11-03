@@ -1,6 +1,8 @@
 //about bpm setting
 document.getElementById('bpm').onchange = function() {
-  bpm = this.value;
+  var bpm1 = parseInt('this.value');
+  if(bpm1 >= 1000) bpm1 = 999; else if(bpm1 < 100) bpm1 = 100;
+  bpm = bpm1, this.value = bpm1;
   musicInfo.beatTime = 60 / bpm;
 }
 

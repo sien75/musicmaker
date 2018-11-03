@@ -3,21 +3,14 @@ function Graphic() {
   this.grids = [];
   this.others = [];
 
-  this.addGraphicForTone = function(label, type, musicScore, position) {
+  this.addGraphic = function(label, type, musicScore, position) {
     if(type == 'grid') {
       that.grids[label]= new Grid();
       that.grids[label].set(label, musicScore, position);
-    } else {
+    } else if(type == 'keyboard') {
       that.others[label] = new Keyboard();
       that.others[label].set(position, 5);
-    }
-  }
-
-  this.addGraphicForDrum = function(label, type, musicScore, position) {
-    if(type == 'grid') {
-      that.grids[label] = new Grid();
-      that.grids[label].set('drums', musicScore, position);
-    } else {
+    } else if(type == 'drums') {
       that.others[label] = new Drums();
       that.others[label].set(position);
     }
@@ -42,15 +35,4 @@ function Graphic() {
       }
     }
   }
-
-  /*this.operateHeader = function(p, s) {
-    for(grid in that.grids) {
-      var m = (p.x - that.grids[grid].left),
-        n = (p.y - that.grids[grid].top);
-      if (n < 0 && n > (-0.8 * that.grids[grid].header) && (m > 0 && m < that.grids[grid].width)) {
-        that.grids[grid].attrChange.click(m);
-      }
-    }
-  }
-  }*/
 }
