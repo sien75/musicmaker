@@ -1,41 +1,41 @@
 function Grid() {
   var that = this;
 
-  this.set = function(label, musicScore, position) {
+  this.set = function(label, position) {
     that.label = label;
-    that.musicScore = musicScore;
+    that.sinMusicScore = musicScore[label];
     that.position = position;
-    that.singleH = position.height / gRows[label],
+    that.singleH = position.height / graphicInfo.gRows[label],
     that.singleW = that.singleH * 1.62;//gold ratio
 
     that.colorPart = new ColorPart();
-    that.colorPart.set(position, gRows[label], gColumns, that.singleW, that.singleH, that.musicScore);
+    that.colorPart.set(position, graphicInfo.gRows[label], graphicInfo.gColumns, that.singleW, that.singleH, that.sinMusicScore);
     that.logicPart = new LogicPart();
-    that.logicPart.set(gRows[label], gColumns, that.musicScore);
+    that.logicPart.set(graphicInfo.gRows[label], graphicInfo.gColumns, that.sinMusicScore);
     that.paint();
   }
 
   this.alter = function(part, newDetail) {
     that[part] = newDetail;//console.log('b', that.position.height);
     if(part == 'position') {
-      that.singleH = that.position.height / gRows[that.label],
+      that.singleH = that.position.height / graphicInfo.gRows[that.label],
       that.singleW = that.singleH * 1.62;//gold ratio
       that.paint();
     }
   }
 
   this.paint = function() {
-    that.drawGrid(that.position, gRows[that.label], gColumns, that.singleW, that.singleH);
-    var alternative = new Array(gRows[this.label] * gColumns);
+    that.drawGrid(that.position, graphicInfo.gRows[that.label], graphicInfo.gColumns, that.singleW, that.singleH);
+    var alternative = new Array(graphicInfo.gRows[this.label] * graphicInfo.gColumns);
     for(var ppp = 0; ppp < alternative.length; ppp++) alternative[ppp] = 0;
     var i = 0, j = 0, temp;
-    that.colorPart.set(that.position, gRows[that.label], gColumns, that.singleW, that.singleH, alternative);
-    for(; i < that.musicScore.length; i++) if(that.musicScore[i] == 1) {
+    that.colorPart.set(that.position, graphicInfo.gRows[that.label], graphicInfo.gColumns, that.singleW, that.singleH, alternative);
+    for(; i < that.sinMusicScore.length; i++) if(that.sinMusicScore[i] == 1) {
       j = i; i += 1;
-      for(; that.musicScore[i] == 2; i++); i -= 1;
+      for(; that.sinMusicScore[i] == 2; i++); i -= 1;
       that.colorPart.execute(j % 32, i % 32, parseInt(i / 32), 'start');
     }
-    that.colorPart.set(that.position, gRows[that.label], gColumns, that.singleW, that.singleH, that.musicScore);
+    that.colorPart.set(that.position, graphicInfo.gRows[that.label], graphicInfo.gColumns, that.singleW, that.singleH, that.sinMusicScore);
   }
 
   this.drawGrid = function(pos, rows, cols, sW, sH) {
@@ -72,7 +72,7 @@ function Grid() {
 
     cav.beginPath();
     cav.strokeStyle = 'rgb(150, 150, 150)';
-    for (var k = 4; k < cols + 1 - 4; k+=4) {
+    for (var k = 4; k < cols + 1; k+=4) {
       cav.moveTo(pos.left + k * sW, pos.top);
       cav.lineTo(pos.left + k * sW, pos.top + pos.height);
     }
@@ -87,11 +87,14 @@ function Grid() {
     var intY = parseInt(y/that.singleH),
       intX1 = parseInt(x1/that.singleW),
       intX2 = parseInt(x2/that.singleW);
-    if(state == 'start' || (state == 'move' && intX2 >= intX1))
+    if(state == 'start' || (state == 'move' && intX2 >= intX1)){
+      that.colorPart.set(that.position, graphicInfo.gRows[that.label], graphicInfo.gColumns, that.singleW, that.singleH, that.sinMusicScore);
       that.colorPart.execute(intX1, intX2, intY, state);
+    }
   }
 
   this.gridLogic = function(y, x1, x2) {
+    that.logicPart.set(graphicInfo.gRows[that.label], graphicInfo.gColumns, that.sinMusicScore);
     that.logicPart.execute(parseInt(x1/that.singleW), parseInt(x2/that.singleW), parseInt(y/that.singleH));
   }
 }

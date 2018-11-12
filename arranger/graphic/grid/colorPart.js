@@ -4,9 +4,9 @@ function ColorPart() {
   var lightColors = [1,3,5,8,10,13,15,17,20,22,25,27,29,32,34];
   var recordX2 = -1;
 
-  this.set = function(position, rows, columns, singleW, singleH, musicScore) {
+  this.set = function(position, rows, columns, singleW, singleH, sinMusicScore) {
     p = position; r = rows; c = columns;
-    sw = singleW; sh = singleH; ms = musicScore;
+    sw = singleW; sh = singleH; ms = sinMusicScore;
   }
 
   this.execute = function(x1, x2, y, state) {

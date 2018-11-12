@@ -9,6 +9,16 @@ document.getElementById('setting').onclick = function() {
   setting.showSetting(-1);
 }
 
+document.getElementById('download').onclick = function () {
+  var cf = confirm("do you want to download the music score on the sceen?");
+  if(cf == true) download.saveAs();
+}
+
+document.getElementById("upld").onchange = function () {
+  var file = this.files[0];
+  upload.ul(file);
+}
+
 body.oncontextmenu = function(e) {
   e.preventDefault();
 }
@@ -45,7 +55,7 @@ canvas.onmousemove = function(e) {
     window['posChange'].x += (currentPos.x - window['rightPos'].x);
     window['posChange'].y += (currentPos.y - window['rightPos'].y);
     window['rightPos'] = currentPos;
-    rePaint();
+    graphic.exeGra();
   }
   else if(window['ifLeftDown']) {
     graphic.operateGrid(window['leftDownPos'], getPos(e), 'move');
@@ -72,7 +82,11 @@ function scrollFunc(e) {
     window['posChange'].x += correction.x * 0.03;
     window['posChange'].y += correction.y * 0.03;
   }
-  rePaint();
+  graphic.exeGra();
+}
+
+window.onresize = function() {
+  graphic.init();
 }
 
 function getPos(e) {
@@ -80,9 +94,4 @@ function getPos(e) {
     x = e.clientX - bbox.left * (canvas.width / bbox.width),
     y = e.clientY - bbox.top * (canvas.height / bbox.height);
     return {x : x, y : y};
-}
-
-window.onresize = function() {
-  //add setting font size change
-  //add canvas size change
 }

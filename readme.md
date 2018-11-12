@@ -1,17 +1,20 @@
-MusicMaker is a web application that can perform simple live perfprmances of instruments and arrange instruments on the web page. Click https://sien75.github.io/MusicMaker to play it.[IntroDuction](# INTRODUCTION)
+MusicMaker is a web application that can perform simple live perfprmances of instruments and arrange instruments on the web page. Click https://sien75.github.io/MusicMaker to play it.[IntroDuction](#INTRODUCTION)  
 MusicMaker是一个可以在网络上进行乐器的简单即时演奏，和简单的编曲的网页应用软件。您可以直接进入https://sien75.github.io/MusicMaker 体验。[介绍](#介绍)
 
 ## INTRODUCTION
 MusicMaker is a web page about music, and there are Liveplay and Arranger two pages in total. On the Liveplay page, you can play music through the keyboard. On the Arranger page, you can make music works by multi-musicarea edit. The page is under construction, so there are some bugs. Thanks for feedback.
 
 ## UPDATE LOG
-#### Oct 12 2018 v1
+### Oct 12 2018 v1
 The Liveplay part has been already been completed, and the Arranger part has basic functions, which include multi-musicarea score edit, zoom in and zoom out of the canvas, and setting.
+### Nov 12 2018 v2
+File upload and download is supported.
+
 
 ## EXTERNAL LINKS
 Home Page https://sien75.github.io/MusicMaker  
 codes https://github.com/sien75/MusicMaker  
-Tutorial updating
+Tutorial updating  
 Email smooooooe@hotmail.com
 
 ## 介绍
@@ -20,10 +23,13 @@ MusicMaker是一个音乐类网页，一共有即时演奏(Liveplay)和编曲(Ar
 ## 更新日志
 ### 2018.10.12 v1
 即时演奏早已完成，编曲也实现了基本功能，这包括多音块的乐谱编写，canvas的放大缩小移动以及设置部分的各项功能。
+### 2018.11.12 v2
+支持音乐文件的上传与下载。
+
 
 ## 链接
-实际网页 https：//sien75.github.io/MusicMaker  
+实际网页 https://sien75.github.io/MusicMaker  
 代码库 https://github.com/sien75/MusicMaker  
 使用教程 暂无，待更新  
-代码解析 暂无，待更新
+代码解析 暂无，待更新  
 邮箱 smooooooe@hotmail.com

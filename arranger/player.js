@@ -18,21 +18,21 @@ function Player() {
   }
 
   this.prepare = function(t) {
-    musicInfo.pieceLength = 0;
+    musicLength = 0;
     var label, i, j, k = 0;
-    for(label = 0; label < numOfGraphics; label++) {
-      for(i = gColumns - 1; i >= 0 && k == 0;i--)
-      for(j = 0; j < gRows[label] && k == 0; j++)
-        if(musicScore[label][j * gColumns + i] != 0) k = i + 1;
-      if(k > musicInfo.pieceLength) musicInfo.pieceLength = k;
+    for(label = 0; label < graphicInfo.numOfGraphics; label++) {
+      for(i = graphicInfo.gColumns - 1; i >= 0 && k == 0;i--)
+      for(j = 0; j < graphicInfo.gRows[label] && k == 0; j++)
+        if(musicScore[label][j * graphicInfo.gColumns + i] != 0) k = i + 1;
+      if(k > musicLength) musicLength = k;
       k = 0;
     }
 
     musicDetail = new Array();
-    for(var n = 0; n < musicInfo.pieceLength + 1; n++) {
+    for(var n = 0; n < musicLength + 1; n++) {
       musicDetail.push(that.transfer(n));
     }
-console.log(musicDetail);
+//console.log(musicDetail);
 //console.log(musicScore);
     audio.getAllInstruments();
     audio.load(0, t);
@@ -43,14 +43,14 @@ console.log(musicDetail);
     var retValue = new Array(2);
     retValue[0] = new Array(), retValue[1] = new Array();
     var a, b;
-    for(var label = 0; label < numOfGraphics; label++) {
-      baseNote = gRows[label] > 24 ? C3 : C4;
-      for(var i = 0; i < gRows[label]; i++) {
-        a = n == musicInfo.pieceLength ? 0 : musicScore[label][i * gColumns + n];
-        b = n == 0 ? 0 : musicScore[label][i * gColumns + n - 1];
-        if(a == 1) retValue[0].push(window[musicInfo.allInstruments[label]](baseNote + gRows[label] - i - 1));
+    for(var label = 0; label < graphicInfo.numOfGraphics; label++) {
+      baseNote = graphicInfo.gRows[label] > 24 ? C3 : C4;
+      for(var i = 0; i < graphicInfo.gRows[label]; i++) {
+        a = n == musicLength ? 0 : musicScore[label][i * graphicInfo.gColumns + n];
+        b = n == 0 ? 0 : musicScore[label][i * graphicInfo.gColumns + n - 1];
+        if(a == 1) retValue[0].push(window[musicInfo.allInstruments[label]](baseNote + graphicInfo.gRows[label] - i - 1));
         if((a == 0 || a == 1) && (b == 2 || b == 1))
-          retValue[1].push(window[musicInfo.allInstruments[label]](baseNote + gRows[label] - i - 1));
+          retValue[1].push(window[musicInfo.allInstruments[label]](baseNote + graphicInfo.gRows[label] - i - 1));
       }
     }//console.log(retValue);
     return retValue;
@@ -59,15 +59,15 @@ console.log(musicDetail);
   this.start = function() {document.getElementById('settingOutline').style.display
     if (window.started) {
       console.log('started already');
-    } else if(musicInfo.pieceLength > 0) {
+    } else if(musicLength > 0) {
       window.started = true;
       console.log('started');
       if(document.getElementById('settingOutline').style.display == 'block')
         document.getElementById('settingOutline').style.display = 'none';
       timer = window.setInterval(function() {
-        if(!(progress < musicInfo.pieceLength)) {
+        if(!(progress < musicLength)) {
           window.clearInterval(timer);
-          audio.handleMusic(musicDetail[musicInfo.pieceLength]);
+          audio.handleMusic(musicDetail[musicLength]);
           progress = 0;
           window.started = false;
           console.log('stopped');

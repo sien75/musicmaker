@@ -2,12 +2,12 @@ function LogicPart() {
   var that = this;
   var ms, r, c;
 
-  this.set = function(rows, columns, musicScore) {
+  this.set = function (rows, columns, sinMusicScore) {
     r = rows, c = columns;
-    ms = musicScore;
+    ms = sinMusicScore;
   }
 
-  this.execute = function(x1, x2, y) {
+  this.execute = function (x1, x2, y) {
     if(ms[y*c + x1] == 0) {
       ms[y*c + x1] = 1;
       var ii = 1;
