@@ -8,23 +8,29 @@ function Graphic() {
     canvas.height = window.innerHeight * 0.95 - 45;
 
     cav.fillStyle = 'black';cav.fillRect(0, 0, canvas.width, canvas.height);
-    var label = 0, totalHeight = 0;
-    for(; label < graphicInfo.numOfGraphics; label++) {
-      that.addGraphic(label, 'grid',
-        that.mainPositions(0, totalHeight, canvas.width, (canvas.height-14)*graphicInfo.gRows[label]/graphicInfo.gRows[0]+14, [0,0,1]) );
-      totalHeight += (canvas.height - 14) * graphicInfo.gRows[label] / graphicInfo.gRows[0] + 14;
+    var label, totalHeight = 0, currentHeight = 0;
+    for(label = 0; label < graphicInfo.numOfGraphics; label++) {
+      currentHeight =
+        (canvas.height - graphicInfo.padding) * graphicInfo.gRows[label] / graphicInfo.gRows[0] + graphicInfo.padding;
+      graphicInfo.positions[label] =
+        that.mainPositions(0, totalHeight, canvas.width, currentHeight, [0, 0, 1]);
+      that.addGraphic(label, 'grid', graphicInfo.positions[label]);
+      totalHeight += currentHeight;
     }
   }
 
   this.exeGra = function () {
     cav.fillStyle = 'black';cav.fillRect(0, 0, canvas.width, canvas.height);
-    var label = 0, totalHeight = 0;
+    var label = 0, totalHeight = 0, currentHeight = 0;
     for(; label < graphicInfo.numOfGraphics; label++) {
       if(graphicInfo.gRows[label] == 0) continue;
-      that.alterGraphic(label, 'position', that.mainPositions(0, totalHeight,
-        canvas.width, (canvas.height-14)*graphicInfo.gRows[label]/graphicInfo.gRows0+14,
-        [window['posChange'].x, window['posChange'].y, window['scale_gain']]) );
-      totalHeight += (canvas.height-14)*graphicInfo.gRows[label]/graphicInfo.gRows0+14;
+      currentHeight =
+        (canvas.height - graphicInfo.padding) * graphicInfo.gRows[label] / graphicInfo.gRows0 + graphicInfo.padding;
+      graphicInfo.positions[label] =
+        that.mainPositions(0, totalHeight, canvas.width, currentHeight,
+          [window['posChange'].x, window['posChange'].y, window['scale_gain']]);
+      that.alterGraphic(label, 'position', graphicInfo.positions[label]);
+      totalHeight += currentHeight;
     }
   }
 
@@ -48,10 +54,10 @@ function Graphic() {
 
   this.mainPositions = function(baseL, baseT, baseW, baseH, changes) {
     return {
-        left : (baseL+ 7) * changes[2] + changes[0],
-        top : (baseT + 7) * changes[2] + changes[1],
-        width : (baseW - 14) * changes[2],
-        height : (baseH - 14) * changes[2]
+        left : (baseL + graphicInfo.padding) * changes[2] + changes[0],
+        top : (baseT + graphicInfo.padding) * changes[2] + changes[1],
+        width : (baseW - graphicInfo.padding) * changes[2],
+        height : (baseH - graphicInfo.padding) * changes[2]
       };
   }
 

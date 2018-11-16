@@ -1,5 +1,6 @@
 function Player() {
   var that = this;
+  var prograssBar = new PrograssBar();
   window.started = false;
   var timer, progress = 0;
   var musicDetail;
@@ -23,7 +24,7 @@ function Player() {
     for(label = 0; label < graphicInfo.numOfGraphics; label++) {
       for(i = graphicInfo.gColumns - 1; i >= 0 && k == 0;i--)
       for(j = 0; j < graphicInfo.gRows[label] && k == 0; j++)
-        if(musicScore[label][j * graphicInfo.gColumns + i] != 0) k = i + 1;
+        if(musicScore[label][j][i] != 0) k = i + 1;
       if(k > musicLength) musicLength = k;
       k = 0;
     }
@@ -32,8 +33,8 @@ function Player() {
     for(var n = 0; n < musicLength + 1; n++) {
       musicDetail.push(that.transfer(n));
     }
-//console.log(musicDetail);
-//console.log(musicScore);
+    //console.log(musicDetail);
+    //console.log(musicScore);
     audio.getAllInstruments();
     audio.load(0, t);
   }
@@ -46,8 +47,8 @@ function Player() {
     for(var label = 0; label < graphicInfo.numOfGraphics; label++) {
       baseNote = graphicInfo.gRows[label] > 24 ? C3 : C4;
       for(var i = 0; i < graphicInfo.gRows[label]; i++) {
-        a = n == musicLength ? 0 : musicScore[label][i * graphicInfo.gColumns + n];
-        b = n == 0 ? 0 : musicScore[label][i * graphicInfo.gColumns + n - 1];
+        a = n == musicLength ? 0 : musicScore[label][i][n];
+        b = n == 0 ? 0 : musicScore[label][i][n - 1];
         if(a == 1) retValue[0].push(window[musicInfo.allInstruments[label]](baseNote + graphicInfo.gRows[label] - i - 1));
         if((a == 0 || a == 1) && (b == 2 || b == 1))
           retValue[1].push(window[musicInfo.allInstruments[label]](baseNote + graphicInfo.gRows[label] - i - 1));
@@ -56,27 +57,28 @@ function Player() {
     return retValue;
   }
 
-  this.start = function() {document.getElementById('settingOutline').style.display
-    if (window.started) {
+  this.start = function() {
+    if (window.started)
       console.log('started already');
-    } else if(musicLength > 0) {
-      window.started = true;
-      console.log('started');
+    else if(musicLength > 0) {
+      window.started = true; console.log('started');
       if(document.getElementById('settingOutline').style.display == 'block')
         document.getElementById('settingOutline').style.display = 'none';
-      timer = window.setInterval(function() {
-        if(!(progress < musicLength)) {
-          window.clearInterval(timer);
-          audio.handleMusic(musicDetail[musicLength]);
-          progress = 0;
-          window.started = false;
-          console.log('stopped');
-        }
-        else {
-          audio.handleMusic(musicDetail[progress]);
-          progress++;
-        }
-      }, 1000 * musicInfo.beatTime);
+      window.setTimeout(function () {
+        prograssBar.startPB();
+        audio.handleMusic(musicDetail[progress]);
+        progress++;
+        timer = window.setInterval(function() {
+          if(!(progress < musicLength)) {
+            audio.handleMusic(musicDetail[musicLength]);
+            that.stop();
+          }
+          else {
+            audio.handleMusic(musicDetail[progress]);
+            progress++;
+          }
+        }, 1000 * musicInfo.beatTime);
+      }, 500);
     }
   }
 
@@ -86,6 +88,7 @@ function Player() {
     } else {
       window.started = false;
       console.log('stopped');
+      prograssBar.stopPB();
       window.clearInterval(timer);
       progress = 0;
     }

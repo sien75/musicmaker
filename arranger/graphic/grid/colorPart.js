@@ -25,8 +25,8 @@ function ColorPart() {
     }
 
     else {
-      if(ms[y*c + x1] == 0) {
-        for(var vv = x1; vv <= x2; vv++) if(ms[y*c + vv] != 0) return;
+      if(ms[y][x1] == 0) {
+        for(var vv = x1; vv <= x2; vv++) if(ms[y][vv] != 0) return;
         cav.fillStyle = 'red';
         cav.fillRect(p.left + x1 * sw + 2, p.top + y * sh + 2, sw * (x2-x1+1) - 4, sh - 4);
         that.drawBeginning(x1, y);
@@ -44,8 +44,8 @@ function ColorPart() {
           cav.lineTo(p.left + (x1 + i) * sw, p.top + (y + 1) * sh);
           cav.stroke();
           i++;
-        } while(ms[y*c + x1 + i] == 2);
-        if(ms[y*c + x1] == 2) that.drawEnding(x1 - 1, y);
+        } while(ms[y][x1 + i] == 2);
+        if(ms[y][x1] == 2) that.drawEnding(x1 - 1, y);
       }
     }
 

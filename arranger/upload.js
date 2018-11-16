@@ -36,12 +36,12 @@ function Upload() {
       musicInfo.allInstruments[i] = v==100 ? 'drums' : instrumentsList[i];
     }
 
-    for(var i = 0; i < l; i++) {
-      for(var j = 0; j < graphicInfo.gRows[i] * graphicInfo.gColumns; j++) {
-        if(j < arrPiece[3][i].length)
-          musicScore[i][j] = parseInt(arrPiece[3][i].slice(j, j+1));
-        else musicScore[i][j] = 0;
-      }
+    for(var i = 0; i < l; i++)
+    for(var j = 0; j < graphicInfo.gRows[i]; j++)
+    for(var k = 0; k < graphicInfo.gColumns; k++) {
+        if(j * graphicInfo.gColumns + k < arrPiece[3][i].length)
+          musicScore[i][j][k] = parseInt(arrPiece[3][i].slice(j, j+1));
+        else musicScore[i][j][k] = 0;
     }
 
     graphic.exeGra();

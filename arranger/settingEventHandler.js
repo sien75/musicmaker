@@ -10,7 +10,31 @@ document.getElementById('bpm').onchange = function() {
 document.getElementById('columns').onchange = function() {
   var columns1 = parseInt(this.value);
   if(columns1 > 1000) columns1 = 1000; else if(columns1 < 8) columns1 = 8;
+  columns1 = handleColumns(columns1);
   graphicInfo.gColumns = columns1, this.value = columns1;graphic.exeGra();
+}
+
+function handleColumns(c) {
+  if(c > graphicInfo.gColumns) {
+    for(var p = 0; p < graphicInfo.numOfGraphics; p++)
+    for(var i = 0; i < graphicInfo.gRows[p]; i++)
+    for(var j = graphicInfo.gColumns; j < c; j++)
+      musicScore[p][i][j] = 0;
+    return c;
+  }
+  else {
+    for(var p = 0; p < graphicInfo.numOfGraphics; p++)
+    for(var i = 0; i < graphicInfo.gRows[p]; i++)
+    for(var j = c; j < graphicInfo.gColumns; j++)
+      if(musicScore[p][i][j] != 0) {
+        alert('cannot reduce size');
+        return graphicInfo.gColumns;
+      }
+    for(var p = 0; p < graphicInfo.numOfGraphics; p++)
+    for(var i = 0; i < graphicInfo.gRows[p]; i++)
+      musicScore[p][i].length = c;
+    return c;
+  }
 }
 
 //about row setting
@@ -62,53 +86,54 @@ document.getElementById('num5SettingTimbre').onchange = function() {
 
 
 function handleMusicScore(num, pre, cur) {
+  var i, j, c;
   if(pre == 0) {
-    for(var i = 0 * graphicInfo.gColumns; i < cur * graphicInfo.gColumns; i++) musicScore[num][i] = 0;
+    for(i = 0; i < cur; i++) musicScore[num][i].forEach(function (a) {a = 0;});
     return cur;
   }
   else if(pre == 24 && cur == 36) {
-    for(var i = 24 * graphicInfo.gColumns; i < 36 * graphicInfo.gColumns; i++) musicScore[num][i] = 0;
+    for(i = 24; i < 36; i++) musicScore[num][i].forEach(function (a) {a = 0;});
     return cur;
   }
   else if(pre == 12 && cur == 24) {
-    for(var i = 0 * graphicInfo.gColumns; i < 12 * graphicInfo.gColumns; i++) musicScore[num][i + 12 * graphicInfo.gColumns] = musicScore[num][i];
-    for(var j = 0; j < 12 * graphicInfo.gColumns; j++) musicScore[num][j] = 0;
+    for(i = 0; i < 12; i++) musicScore[num][i + 12].forEach(function (a, b) {a = musicScore[num][i][b]});
+    for(j = 0; j < 12; j++) musicScore[num][j].forEach(function (a) {a = 0;});
     return cur;
   }
   else if(pre == 12 && cur == 36) {
-    for(var i = 0 * graphicInfo.gColumns; i < 12 * graphicInfo.gColumns; i++) musicScore[num][i + 12 * graphicInfo.gColumns] = musicScore[num][i];
-    for(var j = 0; j < 12 * graphicInfo.gColumns; j++) musicScore[num][j] = musicScore[num][j + 24 * graphicInfo.gColumns] = 0;
+    for(i = 0; i < 12; i++) musicScore[num][i + 12].forEach(function (a, b) {a = musicScore[num][i][b]});
+    for(j = 0; j < 12; j++) musicScore[num][j].forEach(function (a, b) {a = musicScore[num][j + 24][b] = 0;});
     return cur;
   }
 
   else if(cur == 0) {
-    for(var i = 0 * graphicInfo.gColumns; i < pre * graphicInfo.gColumns; i++) if(musicScore[num][i] != 0) {
+    for(i = 0; i < pre; i++) for(c = 0; c < graphicInfo.gColumns; c++) if(musicScore[num][i][c] != 0) {
       alert('cannot reduce size'); return pre;
     }
     musicScore[num].length = 0;
     return cur;
   }
   else if(pre == 24 && cur == 12) {
-    for(var i = 0 * graphicInfo.gColumns; i < 12 * graphicInfo.gColumns; i++) if(musicScore[num][i] != 0) {
+    for(var i = 0; i < 12; i++) for(c = 0; c < graphicInfo.gColumns; c++) if(musicScore[num][i][c] != 0) {
       alert('cannot reduce size'); return pre;
     }
-    for(var j = 0 * graphicInfo.gColumns; j < 12 * graphicInfo.gColumns; j++) musicScore[num][j] = musicScore[num][j + 12 * graphicInfo.gColumns];
-    musicScore[num].length = 12 * graphicInfo.gColumns;
+    for(var j = 0; j < 12; j++) musicScore[num][j].forEach(function (a, b) {a = musicScore[num][j +12][b];});
+    musicScore[num].length = 12;
     return cur;
   }
   else if(pre == 36 && cur == 24) {
-    for(var i = 24 * graphicInfo.gColumns; i < 36 * graphicInfo.gColumns; i++) if(musicScore[num][i] != 0) {
+    for(var i = 24; i < 36; i++) for(c = 0; c < graphicInfo.gColumns; c++) if(musicScore[num][i][c] != 0) {
       alert('cannot reduce size'); return pre;
     }
-    musicScore[num].length = 24 * graphicInfo.gColumns;
+    musicScore[num].length = 24;
     return cur;
   }
   else if(pre == 36 && cur == 12) {
-    for(var i = 0 * graphicInfo.gColumns; i < 12 * graphicInfo.gColumns; i++) if(musicScore[num][i] != 0 || musicScore[num][i + 24 * graphicInfo.gColumns] != 0) {
+    for(var i = 0; i < 12; i++) for(c = 0; c < graphicInfo.gColumns; c++) if(musicScore[num][i][c] != 0 || musicScore[num][i + 24 * graphicInfo.gColumns][c] != 0) {
       alert('cannot reduce size'); return pre;
     }
-    for(var j = 0; j < 12 * graphicInfo.gColumns; j++) musicScore[num][j] = musicScore[num][j + 12 * graphicInfo.gColumns];
-    musicScore[num].length = 12 * graphicInfo.gColumns;
+    for(var j = 0; j < 12; j++) musicScore[num][j].forEach(function (a, b) {a = musicScore[num][j + 12][b];});
+    musicScore[num].length = 12;
     return cur;
   }
 }

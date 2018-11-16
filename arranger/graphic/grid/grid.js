@@ -12,6 +12,7 @@ function Grid() {
     that.colorPart.set(position, graphicInfo.gRows[label], graphicInfo.gColumns, that.singleW, that.singleH, that.sinMusicScore);
     that.logicPart = new LogicPart();
     that.logicPart.set(graphicInfo.gRows[label], graphicInfo.gColumns, that.sinMusicScore);
+
     that.paint();
   }
 
@@ -25,15 +26,21 @@ function Grid() {
   }
 
   this.paint = function() {
+    var alternative = new Array(graphicInfo.gRows[that.label]);
+    for(var y = 0; y < graphicInfo.gRows[that.label]; y++) {
+      alternative[y] = new Array(graphicInfo.gColumns);
+      for(var x = 0; x < graphicInfo.gColumns; x++)
+        alternative[y][x] = 0;
+    }
     that.drawGrid(that.position, graphicInfo.gRows[that.label], graphicInfo.gColumns, that.singleW, that.singleH);
-    var alternative = new Array(graphicInfo.gRows[this.label] * graphicInfo.gColumns);
-    for(var ppp = 0; ppp < alternative.length; ppp++) alternative[ppp] = 0;
-    var i = 0, j = 0, temp;
+    var i, j, temp;
     that.colorPart.set(that.position, graphicInfo.gRows[that.label], graphicInfo.gColumns, that.singleW, that.singleH, alternative);
-    for(; i < that.sinMusicScore.length; i++) if(that.sinMusicScore[i] == 1) {
-      j = i; i += 1;
-      for(; that.sinMusicScore[i] == 2; i++); i -= 1;
-      that.colorPart.execute(j % 32, i % 32, parseInt(i / 32), 'start');
+    for(i = 0; i < that.sinMusicScore.length; i++)
+    for(j = 0; j < that.sinMusicScore[i].length; j++)
+    if(that.sinMusicScore[i][j] == 1) {
+      temp = j; j += 1;
+      for(; that.sinMusicScore[i][j] == 2 && j < that.sinMusicScore[i].length; j++); j -= 1;
+      that.colorPart.execute(temp, j, i, 'start');
     }
     that.colorPart.set(that.position, graphicInfo.gRows[that.label], graphicInfo.gColumns, that.singleW, that.singleH, that.sinMusicScore);
   }

@@ -5,12 +5,12 @@ function Audio() {
   var audioContext = new AudioContextFunc();
   var wafplayer = new WebAudioFontPlayer();
   var _allInstruments;
+  var loadedInstruments = [];
   this.getAllInstruments = function() {
     var ma = musicInfo.allInstruments, dr = ma.indexOf('drums');
     _allInstruments =  dr >= 0 ?
       ma.slice(0, dr).concat(ma.slice(dr + 1, ma.length)).concat(drumContent) : ma;
   }
-  loadedInstruments = [];
 
   this.load = function(num, t) {
     var drumOrTone;
@@ -57,8 +57,6 @@ function Audio() {
       if(!beat[i]) continue;
       drumOrTone = drumContent.indexOf(beat[i].timbre) >= 0 ? '_drum_' : '_tone_';
       window['currentPlay_' + beat[i].timbre][beat[i].pitch] = wafplayer.queueWaveTable(audioContext, audioContext.destination, window[drumOrTone + trans[beat[i].timbre] + '_sf2_file'], 0/*currentTime*/, beat[i].pitch, 100*musicInfo.beatTime, beat[i].volume);
-      //if(drumOrTone == '_drum_') area.drum.hitDrum(beat[i].timbre);
-      //else if(area[beat[i].timbre]) area[beat[i].timbre].paintKey(beat[i].pitch, 'click');
     }
   }
 
@@ -66,7 +64,6 @@ function Audio() {
     if(beat) for (var i = 0; i < beat.length; i++) {
       if(!beat[i]) continue;
       window['currentPlay_' + beat[i].timbre][beat[i].pitch].cancel();
-    //  if(drumContent.indexOf(beat[i].timbre) < 0 && area[beat[i].timbre]) area[beat[i].timbre].paintKey(beat[i].pitch, 'release');
     }
   }
 

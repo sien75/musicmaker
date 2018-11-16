@@ -12,6 +12,7 @@
 			border:3px solid; border-radius:5px">MusicMaker</span>
 			<span style="font-size:28px; display:inline-block; color:rgb(255,83,77); margin:6px 20px 0 0;">Arranger</span>
 			<button type="button" name="button" id="play">play</button>
+			<button type="button" name="button" id="stop">stop</button>
 			<button type="button" name="button" id="setting">setting</button>
 			<input type="file" id="upld" style="display:none">
       <button type="button" id="uploadbutton" onclick="upld.click()">upload</button>
@@ -19,6 +20,7 @@
 		</div>
 
 		<canvas id="canvas" style="position:absolute; z-index:1"></canvas>
+		<canvas id="canvasPB" style="position:absolute; z-index:20; display:none"></canvas>
 
 		<div style="position:absolute; z-index:20; display:none" id="settingOutline">
 			<div style="position:absolute; top:30%; left:30%; width:40%; height:40%;
@@ -39,19 +41,24 @@
 		<script type="text/javascript" src="graphic/grid/grid.js"></script>
 		<script type="text/javascript" src="graphic/graphic.js"></script>
 
-		<!--sound section files-->
+		<!--sound section file-->
 		<script type="text/javascript" src="audio.js"></script>
 
-		<!--upload and download-->
+		<!--about upload and download files-->
 		<script type="text/javascript" src="upload.js"></script>
 		<script type="text/javascript" src="download.js"></script>
 
-		<!--the main js files-->
+		<!--about play files-->
+		<script type="text/javascript" src="prograssBar.js"></script>
+		<script type="text/javascript" src="player.js"></script>
+
+		<!--about setting file-->
 		<script type="text/javascript" src="setting.js"></script>
-		<script type="text/javascript" src="player.js">sRemove</script>
+
+		<!--the main js files-->
 		<script type="text/javascript" src="main.js"></script>
 
-		<!--event handler file-->
+		<!--event handler files-->
 		<script type="text/javascript" src="settingEventHandler.js"></script>
 		<script type="text/javascript" src="eventHandler.js"></script>
 

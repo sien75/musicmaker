@@ -30,8 +30,10 @@ function Download() {
     retValue.push('0x92');
     for(var i = 0; i < graphicInfo.numOfGraphics; i++) {
       retValue.push('0x3' + i);
-      musicScore[i].forEach(function (sig) {
-        retValue.push(sig);
+      musicScore[i].forEach(function (r) {
+        r.forEach(function (c) {
+          retValue.push(c);
+        });
       });
       retValue.push('0x93' + i);
     }
