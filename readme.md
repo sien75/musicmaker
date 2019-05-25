@@ -1,5 +1,5 @@
-MusicMaker is a web application that can perform simple live perfprmances of instruments and arrange instruments on the web page. Click https://sien75.github.io/MusicMaker to play it.[IntroDuction](#INTRODUCTION)  
-MusicMaker是一个可以在网络上进行乐器的简单即时演奏，和简单的编曲的网页应用软件。您可以直接进入https://sien75.github.io/MusicMaker 体验。[介绍](#介绍)
+MusicMaker is a web application that can perform simple live perfprmances of instruments and arrange instruments on the web page. Click https://sien75.github.io/musicmaker to play it.[IntroDuction](#INTRODUCTION)  
+MusicMaker是一个可以在网络上进行乐器的简单即时演奏，和简单的编曲的网页应用软件。您可以直接进入https://sien75.github.io/musicmaker 体验。[介绍](#介绍)
 
 ## INTRODUCTION
 MusicMaker is a web page about music, and there are Liveplay and Arranger two pages in total. On the Liveplay page, you can play music through the keyboard. On the Arranger page, you can make music works by multi-musicarea edit. The page is under construction, so there are some bugs. Thanks for feedback.
@@ -14,8 +14,8 @@ Length of arranger canvas adjustable, and add prograss bar.
 
 
 ## EXTERNAL LINKS
-Home Page https://sien75.github.io/MusicMaker  
-codes https://github.com/sien75/MusicMaker  
+Home Page https://sien75.github.io/musicmaker  
+codes https://github.com/sien75/musicmaker  
 Tutorial updating  
 Email smooooooe@hotmail.com
 
@@ -32,8 +32,8 @@ MusicMaker是一个音乐类网页，一共有即时演奏(Liveplay)和编曲(Ar
 
 
 ## 链接
-实际网页 https://sien75.github.io/MusicMaker  
-代码库 https://github.com/sien75/MusicMaker  
+实际网页 https://sien75.github.io/musicmaker  
+代码库 https://github.com/sien75/musicmaker  
 使用教程 暂无，待更新  
 代码解析 暂无，待更新  
 邮箱 smooooooe@hotmail.com
