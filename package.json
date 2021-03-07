@@ -47,6 +47,7 @@
     "webpack-dev-server": "^3.11.1"
   },
   "dependencies": {
+    "@tonejs/midi": "^2.0.25",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "core-js": "^3.8.1",

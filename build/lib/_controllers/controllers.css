@@ -1,0 +1,18 @@
+.mm-container .normal-controller {
+  background-color: bisque;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.mm-container .normal-controller > button {
+  margin: 0 2px;
+  background-color: cadetblue;
+  color: bisque;
+  border-radius: 4px;
+  border: 0px;
+  outline: none;
+}
+.mm-container .normal-controller > button:active {
+  background-color: aqua;
+}

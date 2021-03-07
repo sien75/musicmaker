@@ -10,7 +10,7 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.jsx', '.js'],
         alias: {
-            musicmaker: path.resolve(__dirname, '../src'),
+            musicmaker: path.resolve(__dirname, '../build/lib'),
         },
     },
 };

@@ -1,0 +1,7 @@
+.mm-container .show-simple {
+  background-color: aqua;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

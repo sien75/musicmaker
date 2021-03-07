@@ -4,7 +4,7 @@ const path = require('path');
 const devMode = process.env.NODE_ENV !== 'production';
 const mcepLoaderFun = () => require('mini-css-extract-plugin').loader;
 const include = [
-    path.resolve(__dirname, '../src'),
+    path.resolve(__dirname, '../build/lib'),
     path.resolve(__dirname, '../examples'),
 ];
 module.exports = {
@@ -17,13 +17,17 @@ module.exports = {
                 include,
             },
             {
-                test: /\.scss$/,
+                test: /\.s?css$/,
                 use: [
                     devMode ? 'style-loader' : mcepLoaderFun(),
                     'css-loader',
                     'sass-loader',
                 ],
                 include,
+            },
+            {
+                test: /\.mp3$/,
+                type: 'asset/resource',
             },
         ],
     },
