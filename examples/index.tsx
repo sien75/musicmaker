@@ -3,8 +3,7 @@ import ReactDom from 'react-dom';
 import { Midi } from '@tonejs/midi';
 
 import MusicMaker from 'musicmaker';
-import { Timbre } from 'musicmaker/_tone';
-import { ControllerAppearance, MmSource } from 'musicmaker/_types';
+import { Timbre, ControllerAppearance, MmSource } from 'musicmaker/_types';
 import 'musicmaker/index.css';
 
 import './index.scss';

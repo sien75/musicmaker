@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Midi } from '@tonejs/midi';
 
-// constants
+// types
 
 import { MMProps, MmAppearance } from './_types';
 
@@ -123,7 +123,7 @@ const MusicMaker = ({
     return (
         <Container
             tone={tone}
-            midi={midi as Midi}
+            midi={midi}
             mmAppearances={mmAppearances}
             controllerAppearance={controllerAppearance}
         />

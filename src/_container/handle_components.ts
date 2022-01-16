@@ -26,7 +26,7 @@ export function loadMmComponents({
     const loadMmComponents = async () => {
         const _mmCom: MmComponents = mmComponents ?? {};
         // load the default show compoment
-        if (!mmComponents || !mmComponents.show_simple) {
+        if (!mmComponents || !mmComponents.show_null) {
             const showNull = (await import('../show_null')).default;
             _mmCom.show_null = showNull;
         }

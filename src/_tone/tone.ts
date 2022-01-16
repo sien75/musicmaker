@@ -11,19 +11,7 @@
 
 import { Sampler, Channel, Transport } from 'tone';
 import { Track } from '@tonejs/midi';
-
-interface Samplers {
-    [index: number]: Sampler;
-}
-
-interface Urls {
-    [name: string]: string;
-}
-export interface Timbre {
-    number: number;
-    baseUrl: string;
-    urls: Urls;
-}
+import { Samplers, Timbre } from '../_types';
 
 export default class Tone {
     // each sampler represents an instrument

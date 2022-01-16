@@ -5,7 +5,6 @@ interface Props {
 }
 
 const loading = ({ children }: Props): JSX.Element => {
-    console.log('[MM]', children);
     return (
         <div>
             loading...

@@ -1,5 +1,6 @@
 import { Midi, Track } from '@tonejs/midi';
-import Tone, { Timbre } from '../_tone';
+import Tone from '../_tone';
+import { Timbre } from '.';
 
 import { Position, MmAppearance, ControllerAppearance } from './appearance';
 import { Scheduled, ShouldObj } from './schedule';
