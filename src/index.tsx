@@ -5,7 +5,7 @@ import { Midi } from '@tonejs/midi';
 
 // types
 
-import { MMProps, MmAppearance } from './_types';
+import { MmProps, MmComponentAppearance } from './_types';
 
 // tone part
 
@@ -21,73 +21,53 @@ import Container from './_container';
 
 // export MusicMaker
 
-const MusicMaker = ({
-    mmSource,
-    timbres,
-    controllerAppearance,
-}: MMProps): JSX.Element => {
+const MusicMaker = ({ rules, timbres }: MmProps): JSX.Element => {
     const [tone] = useState<Tone>(new Tone());
     const [midi, setMidi] = useState<Midi>();
-    const [mmAppearances, setMmAppearances] = useState<MmAppearance[]>();
+    const [mmComponentAppearances, setMmComponentAppearances] = useState<
+        MmComponentAppearance[]
+    >();
     const [timbrePrepared, setTimbrePrepared] = useState(false);
 
     // set midi score and appearances under different types
 
     useEffect(() => {
         const setMidiAndPosition = async () => {
-            switch (mmSource.type) {
-                case 'midi': {
-                    const { url } = mmSource;
-                    if (!url) {
-                        throw new Error(
-                            'mmSource type "midi" must have key "url"'
-                        );
-                    }
+            switch (rules.type) {
+                case 'midiUrl': {
+                    const { url } = rules;
                     setMidi(await Midi.fromUrl(url));
-                    setMmAppearances([]);
+                    setMmComponentAppearances([]);
                     break;
                 }
 
-                case 'json': {
-                    const { url } = mmSource;
-                    if (!url) {
-                        throw new Error(
-                            'mmSource type "json" must have key "url"'
-                        );
-                    }
+                case 'jsonUrl': {
+                    const { url } = rules;
                     const { midi, appearances } = await (
                         await fetch(url)
                     ).json();
-                    if (!midi || !appearances) {
-                        throw new Error(
-                            'mmSource type "json" invalid content format'
-                        );
-                    }
                     setMidi(midi as Midi);
-                    setMmAppearances(appearances as MmAppearance[]);
+                    setMmComponentAppearances(
+                        appearances as MmComponentAppearance[]
+                    );
                     break;
                 }
 
                 case 'object': {
-                    const { midi, mmAppearances } = mmSource;
-                    if (!midi || !mmAppearances) {
-                        throw new Error(
-                            'mmSource type "object" must have key "midi" and "mmAppearances"'
-                        );
-                    }
+                    const { midi, mmComponentAppearances } = rules;
                     setMidi(midi);
-                    setMmAppearances(mmAppearances);
+                    setMmComponentAppearances(mmComponentAppearances);
                     break;
                 }
 
                 default: {
                     setMidi(new Midi());
-                    setMmAppearances([]);
+                    setMmComponentAppearances([]);
                 }
             }
         };
         setMidiAndPosition();
-    }, [mmSource]);
+    }, [rules]);
 
     // load the timbre source
 
@@ -110,8 +90,8 @@ const MusicMaker = ({
 
     // return Loading component when loading
 
-    if (!midi || !mmAppearances) {
-        return <Loading>loading midi source</Loading>;
+    if (!midi || !mmComponentAppearances) {
+        return <Loading>loading rule source</Loading>;
     }
 
     if (!timbrePrepared) {
@@ -124,8 +104,8 @@ const MusicMaker = ({
         <Container
             tone={tone}
             midi={midi}
-            mmAppearances={mmAppearances}
-            controllerAppearance={controllerAppearance}
+            mmComponentAppearances={mmComponentAppearances}
+            controllerAppearance={rules.controllerAppearance}
         />
     );
 };

@@ -1,34 +1,33 @@
-import React, { useEffect } from 'react';
-import { start as ToneJSStart } from 'tone';
+import React, { useEffect, useState } from 'react';
 
 import { ControllerProps } from '../_types';
 
 const normalController = ({
     tone,
     scheduled,
-    scheduled: { should, current, total },
-    onToSchedule,
+    scheduled: { total, current },
+    setScheduled,
 }: ControllerProps): JSX.Element => {
     useEffect(() => {
-        if (should && current === total) {
-            onToSchedule({ should: false });
+        if (current !== 0 && current === total) {
             tone.start();
         }
-    }, [scheduled]);
+    }, [current]);
 
     return (
         <div className="normal-controller">
             <button
                 onClick={() => {
                     const _ = async () => {
-                        if (!window._musicmaker_init) {
-                            await ToneJSStart();
-                            window._musicmaker_init = true;
-                        }
-                        if (tone.sync()) {
-                            onToSchedule({ should: true });
-                        } else {
+                        await tone.audioStart();
+                        if (total === current) {
                             tone.start();
+                        } else {
+                            tone.sync();
+                            setScheduled({
+                                ...scheduled,
+                                should: true,
+                            });
                         }
                     };
                     _();

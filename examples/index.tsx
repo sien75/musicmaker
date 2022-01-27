@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import { Midi } from '@tonejs/midi';
 
 import MusicMaker from 'musicmaker';
-import { Timbre, ControllerAppearance, MmSource } from 'musicmaker/_types';
+import { Timbre, ControllerAppearance, Rules } from 'musicmaker/_types';
 import 'musicmaker/index.css';
 
 import './index.scss';
@@ -50,10 +50,10 @@ const _ = async () => {
 
     console.log('midi score', midi.toJSON());
 
-    const mmSource: MmSource = {
+    const rules: Rules = {
         type: 'object',
         midi,
-        mmAppearances: [
+        mmComponentAppearances: [
             {
                 channel: 0,
                 name: 'show_simple',
@@ -95,7 +95,7 @@ const _ = async () => {
 
     ReactDom.render(
         <MusicMaker
-            mmSource={mmSource}
+            rules={rules}
             timbres={timbres}
             controllerAppearance={controllerAppearance}
         />,

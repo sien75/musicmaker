@@ -1,54 +1,46 @@
-import { Midi, Track } from '@tonejs/midi';
-import Tone from '../_tone';
-import { Timbre } from '.';
+import { Midi } from '@tonejs/midi';
 
-import { Position, MmAppearance, ControllerAppearance } from './appearance';
-import { Scheduled, ShouldObj } from './schedule';
+import { Timbre } from './tone';
+import { Position } from './appearance';
+
+import { MmComponentName } from './mm_component';
+import { ControllerType } from './controller';
 
 // MusicMaker root component's props-format
 
-export interface MMProps {
-    mmSource: MmSource;
-    timbres: Timbre[];
-    controllerAppearance?: ControllerAppearance;
-}
-
-export interface MmSource {
-    type: 'midi' | 'json' | 'object';
-    url?: string;
-    midi?: Midi;
-    mmAppearances?: MmAppearance[];
-}
-
-// MusicMaker components, its names and its props-format
-
-export type MmComponents = {
-    [name in MmNames]?: (props: MmProps) => JSX.Element;
-};
-
-export type MmNames = 'show_simple' | 'show_null' | 'show_custom';
-
 export interface MmProps {
-    tone: Tone;
-    track: Track;
-    scheduled: Scheduled;
-    onScheduled: () => void;
+    rules: Rules;
+    timbres: Timbre[];
 }
 
-export interface MmValue {
-    name: MmNames;
-    position: Position; // for wrapped Layout component
-    track: Track; // for Musicmaker component
+export type Rules = RulesMidiUrl | RulesJsonUrl | RulesObject;
+
+interface RulesMidiUrl {
+    type: 'midiUrl';
+    url: string;
+    controllerAppearance: ControllerAppearance;
 }
 
-// Cotroller components, its types and its props-format
+interface RulesJsonUrl {
+    type: 'jsonUrl';
+    url: string;
+    controllerAppearance: ControllerAppearance;
+}
 
-export type Controller = (props: ControllerProps) => JSX.Element;
+interface RulesObject {
+    type: 'object';
+    midi: Midi;
+    mmComponentAppearances: MmComponentAppearance[];
+    controllerAppearance: ControllerAppearance;
+}
 
-export type ControllerTypes = 'controller_normal' | 'controller_custom';
+export interface MmComponentAppearance {
+    channel: number;
+    position: Position;
+    name: MmComponentName;
+}
 
-export interface ControllerProps {
-    tone: Tone;
-    scheduled: Scheduled;
-    onToSchedule: (shouldObj: ShouldObj) => void;
+export interface ControllerAppearance {
+    type: ControllerType;
+    position: Position;
 }

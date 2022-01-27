@@ -1,37 +1,36 @@
-import { Midi } from '@tonejs/midi';
+import { Midi, Track } from '@tonejs/midi';
 import Tone from '../_tone';
 import {
-    MmAppearance,
-    Controller,
     MmComponents,
-    MmValue,
+    MmComponentName,
+    MmComponentAppearance,
     Position,
-    ControllerAppearance,
-    ControllerTypes,
+    Controller,
+    ControllerType,
 } from '../_types';
 import { nullPosition } from '../_constants';
 import controllerFunction from '../_controllers';
 
 export interface lmcProps {
-    mmAppearances: MmAppearance[];
+    mmComponentAppearances: MmComponentAppearance[];
     mmComponents?: MmComponents;
     setMmComponents: (mmComponents: MmComponents) => void;
 }
 
 export function loadMmComponents({
-    mmAppearances,
+    mmComponentAppearances,
     mmComponents,
     setMmComponents,
 }: lmcProps): void {
     const loadMmComponents = async () => {
         const _mmCom: MmComponents = mmComponents ?? {};
         // load the default show compoment
-        if (!mmComponents || !mmComponents.show_null) {
+        if (!_mmCom.show_null) {
             const showNull = (await import('../show_null')).default;
             _mmCom.show_null = showNull;
         }
-        for (const { name } of mmAppearances) {
-            if (!mmComponents || !mmComponents[name]) {
+        for (const { name } of mmComponentAppearances) {
+            if (!_mmCom[name]) {
                 try {
                     const newComponents = (await import(`../${name}`)).default;
                     _mmCom[name] = newComponents;
@@ -46,77 +45,63 @@ export function loadMmComponents({
     loadMmComponents();
 }
 
-export interface lmcvProps {
-    mmAppearances: MmAppearance[];
-    midi: Midi;
-    tone: Tone;
-    setMmValuesArray: (mmValues: MmValue[]) => void;
+export interface MmComponentValue {
+    name: MmComponentName;
+    position: Position; // for wrapped Layout component
+    track: Track; // for Musicmaker component
 }
 
-export function loadMmValue({
-    mmAppearances,
+export interface lmcvProps {
+    mmComponentAppearances: MmComponentAppearance[];
+    midi: Midi;
+    tone: Tone;
+    setMmComponentValues: (mmValues: MmComponentValue[]) => void;
+}
+
+export function loadMmComponentValue({
+    mmComponentAppearances,
     midi,
-    setMmValuesArray,
+    setMmComponentValues,
 }: lmcvProps): void {
-    const _mmValues = midi.tracks
+    const _mmComVls: MmComponentValue[] = [];
+    midi.tracks
         .filter(({ notes }) => notes.length)
-        .map((track) => {
+        .forEach((track) => {
             const { channel } = track;
-            let appearance = mmAppearances.filter(
-                ({ channel: _channel }) => _channel === channel
-            )[0];
-            if (!appearance) {
-                appearance = {
-                    name: 'show_null',
-                    channel,
-                    position: nullPosition,
-                };
-            }
-            return {
-                name: appearance.name,
-                track,
-                position: appearance.position,
-            };
+            mmComponentAppearances
+                .filter(({ channel: _channel }) => _channel === channel)
+                .forEach(({ name, position }) => {
+                    _mmComVls.push({ name, track, position });
+                });
         });
-    setMmValuesArray(_mmValues);
+    setMmComponentValues(_mmComVls);
 }
 
 export interface lccProps {
-    controllerAppearance?: ControllerAppearance;
-    setController: (Controller: () => Controller) => void;
-}
-
-interface TypeObj {
-    type: ControllerTypes;
+    controllerType: ControllerType;
+    setController: (controller: Controller) => void;
 }
 
 export function loadControllerComponent({
-    controllerAppearance,
+    controllerType,
     setController,
 }: lccProps): void {
-    const getController = async function ({ type }: TypeObj) {
-        const _Controller = await controllerFunction(type);
-        setController(() => _Controller);
+    const getAndSetController = async () => {
+        const _Controller = await controllerFunction(controllerType);
+        setController(_Controller);
     };
-    if (controllerAppearance) {
-        const { type } = controllerAppearance;
-        getController({ type });
-    } else {
-        getController({ type: 'controller_normal' });
-    }
+    getAndSetController();
 }
 
 export interface lcpProps {
-    controllerAppearance?: ControllerAppearance;
+    controllerPosition: Position;
     setControllerPosition: (position: Position) => void;
 }
 
 export function loadControllerPosition({
-    controllerAppearance,
+    controllerPosition,
     setControllerPosition,
 }: lcpProps): void {
-    const _controllerPosition = controllerAppearance
-        ? controllerAppearance.position
-        : nullPosition;
+    const _controllerPosition = controllerPosition;
     setControllerPosition(_controllerPosition);
 }

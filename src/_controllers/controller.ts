@@ -1,7 +1,7 @@
-import { Controller, ControllerTypes } from '../_types';
+import { Controller, ControllerType } from '../_types';
 
 const getController = async function (
-    controllerType: ControllerTypes
+    controllerType: ControllerType
 ): Promise<Controller> {
     let rtn: Controller;
     switch (controllerType) {

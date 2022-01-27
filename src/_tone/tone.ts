@@ -7,13 +7,16 @@
 // the "Transport" is provided by Tonejs library
 // it controls the time
 
+// the 'start' as 'autoStart' is provided by Tonejs library
+// it starts the audio context on a click or keypress event handler
+
 // the "Track" defines a format for midi score
 
-import { Sampler, Channel, Transport } from 'tone';
+import { Sampler, Channel, Transport, start as _audioStart } from 'tone';
 import { Track } from '@tonejs/midi';
-import { Samplers, Timbre } from '../_types';
+import { Tone, Samplers, Timbre } from '../_types';
 
-export default class Tone {
+export default class _Tone implements Tone {
     // each sampler represents an instrument
     public samplers: Samplers = {};
 
@@ -111,6 +114,12 @@ export default class Tone {
             return true;
         }
         return false;
+    }
+
+    // Tonejs start the audio context
+
+    public async audioStart(): Promise<void> {
+        _audioStart();
     }
 
     // start, pause and stop methods

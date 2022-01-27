@@ -6,13 +6,11 @@ import React, { useEffect, useState } from 'react';
 // constants
 
 import {
-    MmValue,
     MmComponents,
-    MmAppearance,
+    MmComponentAppearance,
     Controller,
     Position,
     Scheduled,
-    ShouldObj,
     ControllerAppearance,
 } from '../_types';
 
@@ -31,24 +29,27 @@ import {
     loadControllerComponent,
     loadControllerPosition,
     loadMmComponents,
-    loadMmValue,
+    loadMmComponentValue,
+    MmComponentValue,
 } from './handle_components';
 
 interface Props {
     tone: Tone;
     midi: Midi;
-    mmAppearances: MmAppearance[];
-    controllerAppearance?: ControllerAppearance;
+    mmComponentAppearances: MmComponentAppearance[];
+    controllerAppearance: ControllerAppearance;
 }
 
 const container = ({
     tone,
     midi,
-    mmAppearances,
+    mmComponentAppearances,
     controllerAppearance,
 }: Props): JSX.Element => {
     const [mmComponents, setMmComponents] = useState<MmComponents>();
-    const [mmValues, setMmValuesArray] = useState<Array<MmValue>>();
+    const [mmComponentValues, setMmComponentValues] = useState<
+        Array<MmComponentValue>
+    >();
     const [Controller, setController] = useState<Controller>();
     const [controllerPosition, setControllerPosition] = useState<Position>();
     const [scheduled, setScheduled] = useState<Scheduled>({
@@ -60,59 +61,65 @@ const container = ({
     // load MusicMaker components
 
     useEffect(() => {
-        loadMmComponents({ mmAppearances, mmComponents, setMmComponents });
-    }, [mmAppearances]);
+        loadMmComponents({
+            mmComponentAppearances,
+            mmComponents,
+            setMmComponents,
+        });
+    }, [mmComponentAppearances]);
 
     // load props passed to the MusicMaker components and the related Layout components
 
     useEffect(() => {
-        loadMmValue({ mmAppearances, midi, tone, setMmValuesArray });
-    }, [mmAppearances, midi]);
+        loadMmComponentValue({
+            mmComponentAppearances,
+            midi,
+            tone,
+            setMmComponentValues,
+        });
+    }, [mmComponentAppearances, midi]);
 
     // load Controller component
 
     useEffect(() => {
-        loadControllerComponent({ controllerAppearance, setController });
-    }, [controllerAppearance]);
+        loadControllerComponent({
+            controllerType: controllerAppearance.type,
+            setController,
+        });
+    }, [controllerAppearance.type]);
 
     // load props passed to the Layout component related to the Controller component
 
     useEffect(() => {
-        loadControllerPosition({ controllerAppearance, setControllerPosition });
-    }, [controllerAppearance]);
+        loadControllerPosition({
+            controllerPosition: controllerAppearance.position,
+            setControllerPosition,
+        });
+    }, [controllerAppearance.position]);
 
     // control the progress of scheduling midi
 
-    const toSchedule = ({ should }: ShouldObj) => {
-        setScheduled({ ...scheduled, should, current: 0 });
-    };
-    const onScheduled = () => {
-        setScheduled({ ...scheduled, current: scheduled.current + 1 });
-    };
     useEffect(() => {
         setScheduled({
             ...scheduled,
-            total: midi.tracks.filter(({ notes }) => notes.length).length,
+            total: (mmComponentValues || []).length,
         });
-    }, [midi]);
+    }, [mmComponentValues]);
 
     // show 'loading' when load components
 
-    if (!mmComponents || !mmValues) {
-        return <Loading>loading graphic part of MusicMaker components</Loading>;
+    if (!mmComponents || !mmComponentValues) {
+        return <Loading>loading MusicMaker components</Loading>;
     }
 
     if (!Controller || !controllerPosition) {
-        return <Loading>loading graphic part of Controller components</Loading>;
+        return <Loading>loading Controller components</Loading>;
     }
 
-    if (scheduled.should) {
-        if (scheduled.current != scheduled.total) {
-            console.log('[MM] scheduling midi tracks...');
-        } else {
-            console.log('[MM] scheduled!');
-        }
+    if (scheduled.current != scheduled.total) {
+        console.log('[MM] scheduling midi tracks...');
     }
+
     // hierarchy:
     //      container
     //          |- Layout
@@ -127,10 +134,10 @@ const container = ({
                 <Controller
                     tone={tone}
                     scheduled={scheduled}
-                    onToSchedule={toSchedule}
+                    setScheduled={setScheduled}
                 />
             </Layout>
-            {mmValues.map(({ name, track, position }, index) => {
+            {mmComponentValues.map(({ name, track, position }, index) => {
                 const MmComponent =
                     mmComponents[name] ?? mmComponents.show_null;
                 if (!MmComponent) {
@@ -147,7 +154,7 @@ const container = ({
                             tone={tone}
                             track={track}
                             scheduled={scheduled}
-                            onScheduled={onScheduled}
+                            setScheduled={setScheduled}
                         />
                     </Layout>
                 );

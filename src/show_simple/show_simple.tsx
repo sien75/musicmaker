@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
 
-import { MmProps } from '../_types';
+import { MmComponentProps } from '../_types';
 
 const ele = ({
     tone,
     track,
-    scheduled: { should },
-    onScheduled,
-}: MmProps): JSX.Element => {
+    scheduled,
+    scheduled: { should, current },
+    setScheduled,
+}: MmComponentProps): JSX.Element => {
     useEffect(() => {
-        if (should) {
-            tone.scheduleMulti(track);
-            onScheduled();
-        }
+        tone.scheduleMulti(track);
+        setScheduled({ ...scheduled, current: current + 1 });
     }, [should]);
     return (
         <div className="show-simple">
