@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface Props {
     children: string;
@@ -13,4 +13,4 @@ const loading = ({ children }: Props): JSX.Element => {
     );
 };
 
-export default loading;
+export default memo(loading);

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 
 import { MmComponentProps } from '../_types';
 
@@ -10,8 +10,10 @@ const ele = ({
     setScheduled,
 }: MmComponentProps): JSX.Element => {
     useEffect(() => {
-        tone.scheduleMulti(track);
-        setScheduled({ ...scheduled, current: current + 1 });
+        if (should) {
+            tone.scheduleMulti(track);
+            setScheduled({ ...scheduled, current: current + 1 });
+        }
     }, [should]);
     return (
         <div className="show-simple">
@@ -20,4 +22,4 @@ const ele = ({
     );
 };
 
-export default ele;
+export default memo(ele);

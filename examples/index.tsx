@@ -1,9 +1,15 @@
+// react, 用于支持JSX语法
 import React from 'react';
+// react的DOM渲染
 import ReactDom from 'react-dom';
+// Midi类型
 import { Midi } from '@tonejs/midi';
-
+// MusicMaker库(组件)
 import MusicMaker from 'musicmaker';
-import { Timbre, ControllerAppearance, Rules } from 'musicmaker/_types';
+// Rules和Timbre类型
+// 用于TypeScript, 使用JavaScript的话无需引入
+import { Rules, Timbre } from 'musicmaker/_types';
+// MusicMaker库的CSS文件
 import 'musicmaker/index.css';
 
 import './index.scss';
@@ -65,6 +71,15 @@ const _ = async () => {
                 },
             },
         ],
+        controllerAppearance: {
+            type: 'controller_normal',
+            position: {
+                left: '0%',
+                top: '0%',
+                width: '40%',
+                height: '10%',
+            },
+        },
     };
 
     const timbres: Timbre[] = [
@@ -83,22 +98,8 @@ const _ = async () => {
         },
     ];
 
-    const controllerAppearance: ControllerAppearance = {
-        type: 'controller_normal',
-        position: {
-            left: '0%',
-            top: '0%',
-            width: '40%',
-            height: '10%',
-        },
-    };
-
     ReactDom.render(
-        <MusicMaker
-            rules={rules}
-            timbres={timbres}
-            controllerAppearance={controllerAppearance}
-        />,
+        <MusicMaker rules={rules} timbres={timbres} />,
         document.getElementById('app')
     );
 };

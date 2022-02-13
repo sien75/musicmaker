@@ -1,6 +1,6 @@
 // basic imports
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Midi } from '@tonejs/midi';
 
 // types
@@ -110,4 +110,4 @@ const MusicMaker = ({ rules, timbres }: MmProps): JSX.Element => {
     );
 };
 
-export default MusicMaker;
+export default memo(MusicMaker);

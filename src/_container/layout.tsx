@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Position } from '../_types';
 
 interface Props {
@@ -24,4 +24,4 @@ const Layout = ({ position, children }: Props): JSX.Element => {
     );
 };
 
-export default Layout;
+export default memo(Layout);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, memo } from 'react';
 
 import { ControllerProps } from '../_types';
 
@@ -52,4 +52,4 @@ const normalController = ({
     );
 };
 
-export default normalController;
+export default memo(normalController);

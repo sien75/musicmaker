@@ -1,107 +1,99 @@
 import { Midi, Track } from '@tonejs/midi';
-import Tone from '../_tone';
 import {
+    MmComponent,
     MmComponents,
-    MmComponentName,
     MmComponentAppearance,
     Position,
     Controller,
     ControllerType,
+    ControllerAppearance,
 } from '../_types';
-import { nullPosition } from '../_constants';
 import controllerFunction from '../_controllers';
 
-export interface lmcProps {
-    mmComponentAppearances: MmComponentAppearance[];
-    mmComponents?: MmComponents;
-    setMmComponents: (mmComponents: MmComponents) => void;
-}
-
-export function loadMmComponents({
-    mmComponentAppearances,
-    mmComponents,
-    setMmComponents,
-}: lmcProps): void {
-    const loadMmComponents = async () => {
-        const _mmCom: MmComponents = mmComponents ?? {};
-        // load the default show compoment
-        if (!_mmCom.show_null) {
-            const showNull = (await import('../show_null')).default;
-            _mmCom.show_null = showNull;
-        }
-        for (const { name } of mmComponentAppearances) {
-            if (!_mmCom[name]) {
-                try {
-                    const newComponents = (await import(`../${name}`)).default;
-                    _mmCom[name] = newComponents;
-                } catch (e) {
-                    // ensure that error does not break the for loop
-                    console.error(e);
-                }
-            }
-        }
-        setMmComponents(_mmCom);
+export interface MmComponentValues {
+    [key: string]: {
+        component: MmComponent;
+        position: Position; // for wrapped Layout component
+        track: Track; // for Musicmaker component
     };
-    loadMmComponents();
 }
 
-export interface MmComponentValue {
-    name: MmComponentName;
-    position: Position; // for wrapped Layout component
-    track: Track; // for Musicmaker component
-}
-
-export interface lmcvProps {
+interface lmcvProps {
     mmComponentAppearances: MmComponentAppearance[];
     midi: Midi;
-    tone: Tone;
-    setMmComponentValues: (mmValues: MmComponentValue[]) => void;
+    setMmComponentValues: (mmValues: MmComponentValues) => void;
+    setLoading: (loading: boolean) => void;
 }
 
-export function loadMmComponentValue({
+const loadedMmComponents: MmComponents = {};
+const loadedMmValues: MmComponentValues = {};
+
+export async function loadMmComponentValues({
     mmComponentAppearances,
     midi,
     setMmComponentValues,
-}: lmcvProps): void {
-    const _mmComVls: MmComponentValue[] = [];
-    midi.tracks
-        .filter(({ notes }) => notes.length)
-        .forEach((track) => {
-            const { channel } = track;
-            mmComponentAppearances
-                .filter(({ channel: _channel }) => _channel === channel)
-                .forEach(({ name, position }) => {
-                    _mmComVls.push({ name, track, position });
-                });
-        });
-    setMmComponentValues(_mmComVls);
+    setLoading,
+}: lmcvProps): Promise<void> {
+    setLoading(true);
+    let dirty = false;
+
+    const tracks = midi.tracks.filter(({ notes }) => notes.length);
+    for (const track of tracks) {
+        const appearancesOfChannel = mmComponentAppearances.filter(
+            ({ channel }) => track.channel === channel
+        );
+        for (const { name, position } of appearancesOfChannel) {
+            const key = `${name}-${track.channel}`;
+            if (!loadedMmComponents[name])
+                loadedMmComponents[name] = (await import(`../${name}`)).default;
+            const component = loadedMmComponents[name];
+            if (!component) continue;
+            if (
+                component === loadedMmValues[key]?.component &&
+                position === loadedMmValues[key]?.position &&
+                track === loadedMmValues[key]?.track
+            )
+                continue;
+            dirty = true;
+            loadedMmValues[key] = { component, track, position };
+        }
+    }
+    if (dirty) {
+        setMmComponentValues({ ...loadedMmValues });
+    }
+    setLoading(false);
 }
 
-export interface lccProps {
-    controllerType: ControllerType;
-    setController: (controller: Controller) => void;
+export interface ControllerComponentValue {
+    type: ControllerType;
+    component: Controller;
+    position: Position;
 }
 
-export function loadControllerComponent({
-    controllerType,
-    setController,
-}: lccProps): void {
-    const getAndSetController = async () => {
-        const _Controller = await controllerFunction(controllerType);
-        setController(_Controller);
-    };
-    getAndSetController();
+interface lccvProps {
+    controllerAppearance: ControllerAppearance;
+    setControllerComponentValue: (cValues: ControllerComponentValue) => void;
+    setLoading: (loading: boolean) => void;
 }
 
-export interface lcpProps {
-    controllerPosition: Position;
-    setControllerPosition: (position: Position) => void;
-}
+let loadedCmValue: ControllerComponentValue | null = null;
 
-export function loadControllerPosition({
-    controllerPosition,
-    setControllerPosition,
-}: lcpProps): void {
-    const _controllerPosition = controllerPosition;
-    setControllerPosition(_controllerPosition);
+export async function loadControllerComponentValue({
+    controllerAppearance: { type, position },
+    setControllerComponentValue,
+    setLoading,
+}: lccvProps): Promise<void> {
+    setLoading(true);
+    const component =
+        type === loadedCmValue?.type
+            ? loadedCmValue.component
+            : await controllerFunction(type);
+    if (
+        component !== loadedCmValue?.component ||
+        position !== loadedCmValue?.position
+    ) {
+        loadedCmValue = { type, position, component };
+        setControllerComponentValue({ ...loadedCmValue });
+    }
+    setLoading(false);
 }
