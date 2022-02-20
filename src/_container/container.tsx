@@ -1,15 +1,11 @@
 // basic imports
 
 import { Midi } from '@tonejs/midi';
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState, memo, useMemo, useCallback } from 'react';
 
 // constants
 
-import {
-    MmComponentAppearance,
-    Scheduled,
-    ControllerAppearance,
-} from '../_types';
+import { MmComponentAppearance, ControllerAppearance } from '../_types';
 
 // base components
 
@@ -42,22 +38,14 @@ const container = ({
     mmComponentAppearances,
     controllerAppearance,
 }: Props): JSX.Element => {
+    const [loading, setLoading] = useState(false);
+
+    // load MusicMaker components and their related props: 'track' and 'position'
+
     const [
         mmComponentValues,
         setMmComponentValues,
     ] = useState<MmComponentValues>();
-    const [
-        controllerComponentValue,
-        setControllerComponentValue,
-    ] = useState<ControllerComponentValue>();
-    const [loading, setLoading] = useState(false);
-    const [scheduled, setScheduled] = useState<Scheduled>({
-        should: false,
-        total: 0,
-        current: 0,
-    });
-
-    // load MusicMaker components and their related props: 'track' and 'position'
 
     useEffect(() => {
         loadMmComponentValues({
@@ -70,6 +58,11 @@ const container = ({
 
     // load Controller component and its related props: 'position'
 
+    const [
+        controllerComponentValue,
+        setControllerComponentValue,
+    ] = useState<ControllerComponentValue>();
+
     useEffect(() => {
         loadControllerComponentValue({
             controllerAppearance,
@@ -80,23 +73,44 @@ const container = ({
 
     // control the progress of scheduling midi
 
+    const [total, setTotal] = useState(0);
+    const [current, setCurrent] = useState(0);
     useEffect(() => {
-        if (mmComponentValues) {
-            setScheduled({
-                ...scheduled,
-                total: Object.keys(mmComponentValues).length,
-            });
-        }
+        setTotal(mmComponentValues ? Object.keys(mmComponentValues).length : 0);
+        setCurrent(0);
     }, [mmComponentValues]);
+
+    // when user click the "play" button in Controller Component,
+    // Controller Component will trigger start signal,
+    // to inform MusicMaker Components scheduling midi if needed
+    const triggerStartSignal = useCallback(() => {
+        setShould(true);
+    }, []);
+
+    // "should" for MusicMaker Components, inform them to schedule midi if needed
+    const [should, setShould] = useState(false);
+
+    // MusicMaker Components will call this method once they are ready
+    const updateCurrent = useCallback((ready) => {
+        setCurrent((c) => c + 1);
+        console.log(`[MM]: scheduled one ${ready ? 'success' : 'failed'}`);
+    }, []);
+
+    // "allReady" inform Controller Component that it's time to actually play,
+    // reset "current" and "should" meanwhile
+    const allReady = useMemo(() => {
+        if (current === total && current !== 0) {
+            setShould(false);
+            console.log('[MM]: all scheduled!');
+            return true;
+        }
+        return false;
+    }, [current, total]);
 
     // show 'loading' when load components
 
     if (loading || !mmComponentValues || !controllerComponentValue) {
         return <Loading>loading MusicMaker or Controller components</Loading>;
-    }
-
-    if (scheduled.should && scheduled.current != scheduled.total) {
-        console.log('[MM] scheduling midi tracks...');
     }
 
     // hierarchy:
@@ -114,8 +128,8 @@ const container = ({
             <Layout position={controllerComponentValue.position}>
                 <Controller
                     tone={tone}
-                    scheduled={scheduled}
-                    setScheduled={setScheduled}
+                    allReady={allReady}
+                    triggerStartSignal={triggerStartSignal}
                 />
             </Layout>
             {Object.keys(mmComponentValues).map((key) => {
@@ -130,8 +144,8 @@ const container = ({
                         <MmComponent
                             tone={tone}
                             track={track}
-                            scheduled={scheduled}
-                            setScheduled={setScheduled}
+                            should={should}
+                            updateCurrent={updateCurrent}
                         />
                     </Layout>
                 );

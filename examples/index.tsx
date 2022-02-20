@@ -14,6 +14,8 @@ import 'musicmaker/index.css';
 
 import './index.scss';
 
+import test from './test.mid';
+
 const _ = async () => {
     const midi = new Midi();
     const track = midi.addTrack();
@@ -54,23 +56,12 @@ const _ = async () => {
             duration: 0.2,
         });
 
-    console.log('midi score', midi.toJSON());
+    // console.log('midi score', midi.toJSON());
 
     const rules: Rules = {
-        type: 'object',
-        midi,
-        mmComponentAppearances: [
-            {
-                channel: 0,
-                name: 'show_simple',
-                position: {
-                    left: '0%',
-                    top: '10%',
-                    width: '20%',
-                    height: '20%',
-                },
-            },
-        ],
+        type: 'midiUrl',
+        url: test,
+        mmComponentAppearances: [],
         controllerAppearance: {
             type: 'controller_normal',
             position: {
@@ -84,7 +75,7 @@ const _ = async () => {
 
     const timbres: Timbre[] = [
         {
-            number: 0,
+            number: 57,
             baseUrl: '',
             urls: {
                 C4: (await import('./piano/C4.mp3')).default,

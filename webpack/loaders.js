@@ -26,7 +26,7 @@ module.exports = {
                 include,
             },
             {
-                test: /\.mp3$/,
+                test: /\.(mp3|mid)$/,
                 type: 'asset/resource',
             },
         ],

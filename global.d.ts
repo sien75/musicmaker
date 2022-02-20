@@ -5,6 +5,11 @@ declare global {
         const content: string;
         export default content;
     }
+
+    declare module '*.mid' {
+        const content: string;
+        export default content;
+    }
     interface Window {
         _musicmaker_current: Tone | null;
         _musicmaker_init: boolean;

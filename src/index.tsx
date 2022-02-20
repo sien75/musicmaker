@@ -35,9 +35,9 @@ const MusicMaker = ({ rules, timbres }: MmProps): JSX.Element => {
         const setMidiAndPosition = async () => {
             switch (rules.type) {
                 case 'midiUrl': {
-                    const { url } = rules;
+                    const { url, mmComponentAppearances } = rules;
                     setMidi(await Midi.fromUrl(url));
-                    setMmComponentAppearances([]);
+                    setMmComponentAppearances(mmComponentAppearances);
                     break;
                 }
 

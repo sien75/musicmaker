@@ -4,15 +4,14 @@ import { ControllerProps } from '../_types';
 
 const normalController = ({
     tone,
-    scheduled,
-    scheduled: { total, current },
-    setScheduled,
+    allReady,
+    triggerStartSignal,
 }: ControllerProps): JSX.Element => {
     useEffect(() => {
-        if (current !== 0 && current === total) {
+        if (allReady) {
             tone.start();
         }
-    }, [current]);
+    }, [allReady]);
 
     return (
         <div className="normal-controller">
@@ -20,14 +19,10 @@ const normalController = ({
                 onClick={() => {
                     const _ = async () => {
                         await tone.audioStart();
-                        if (total === current) {
-                            tone.start();
-                        } else {
+                        if(allReady) tone.start();
+                        else {
                             tone.sync();
-                            setScheduled({
-                                ...scheduled,
-                                should: true,
-                            });
+                            triggerStartSignal();
                         }
                     };
                     _();

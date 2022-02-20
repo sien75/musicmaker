@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "start": "webpack serve --config webpack/config.doc.dev.js",
-    "build": "webpack --config webpack/config.doc.js",
+    "build:examples": "webpack --config webpack/config.doc.js",
     "build:lib": "rm -rf build/lib/* && tsc --project tsconfig.lib.json && sass src:build/lib --no-source-map"
   },
   "repository": {

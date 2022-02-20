@@ -8,6 +8,7 @@ import {
     ControllerType,
     ControllerAppearance,
 } from '../_types';
+import { nullPosition } from '../_constants';
 import controllerFunction from '../_controllers';
 
 export interface MmComponentValues {
@@ -39,24 +40,31 @@ export async function loadMmComponentValues({
 
     const tracks = midi.tracks.filter(({ notes }) => notes.length);
     for (const track of tracks) {
-        const appearancesOfChannel = mmComponentAppearances.filter(
-            ({ channel }) => track.channel === channel
-        );
-        for (const { name, position } of appearancesOfChannel) {
-            const key = `${name}-${track.channel}`;
-            if (!loadedMmComponents[name])
-                loadedMmComponents[name] = (await import(`../${name}`)).default;
-            const component = loadedMmComponents[name];
-            if (!component) continue;
-            if (
-                component === loadedMmValues[key]?.component &&
-                position === loadedMmValues[key]?.position &&
-                track === loadedMmValues[key]?.track
-            )
-                continue;
-            dirty = true;
-            loadedMmValues[key] = { component, track, position };
+        const channel = track.channel;
+        const channelStr = String(channel);
+        let appearanceOfChannel = mmComponentAppearances.filter(
+            ({ channel: _channel }) => _channel === channel
+        )[0];
+        if (!appearanceOfChannel) {
+            appearanceOfChannel = {
+                channel,
+                position: nullPosition,
+                name: 'show_null',
+            };
         }
+        const { name, position } = appearanceOfChannel;
+        if (!loadedMmComponents[name])
+            loadedMmComponents[name] = (await import(`../${name}`))?.default;
+        const component = loadedMmComponents[name];
+        if (!component) continue;
+        if (
+            component === loadedMmValues[channelStr]?.component &&
+            position === loadedMmValues[channelStr]?.position &&
+            track === loadedMmValues[channelStr]?.track
+        )
+            continue;
+        dirty = true;
+        loadedMmValues[channelStr] = { component, track, position };
     }
     if (dirty) {
         setMmComponentValues({ ...loadedMmValues });

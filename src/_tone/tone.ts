@@ -31,23 +31,25 @@ export default class _Tone implements Tone {
     // for "play" component to play single note on mouse down or key down
 
     public playSingle(number: number, note: string, velocity?: number): void {
+        if(!this.samplers[number]) return;
         this.samplers[number].triggerAttack(note, undefined, velocity ?? 1);
     }
 
     public cancelSingle(number: number, note: string): void {
+        if(!this.samplers[number]) return;
         this.samplers[number].triggerRelease(note);
     }
 
     // for "show" component to arrange multi notes according to midi score
 
-    public scheduleMulti(track: Track): number[] {
-        console.log('schedule multi', { track });
+    public scheduleMulti(track: Track): number[] | number {
         const ids: number[] = [];
         // set new triggers of each sampler
         const {
             notes,
             instrument: { number },
         } = track;
+        if(!this.samplers[number]) return 0;
         for (const { time, duration, name: note, velocity } of notes) {
             ids.push(
                 Transport.schedule(
@@ -74,6 +76,7 @@ export default class _Tone implements Tone {
         duration: number,
         velocity?: number
     ): number {
+        if(!this.samplers[number]) return 0;
         return Transport.schedule(
             (_time) =>
                 this.samplers[number].triggerAttackRelease(
@@ -89,6 +92,7 @@ export default class _Tone implements Tone {
     // cancel the notes scheduled by "show" and "arrange" component
 
     public cancelSchedule(id: number | number[]): void {
+        if(id === 0) return;
         if (typeof id === 'number') {
             Transport.clear(id as number);
         } else {

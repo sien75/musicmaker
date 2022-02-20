@@ -6,7 +6,7 @@ export interface Tone {
     addTimbre: ({ number, baseUrl, urls }: Timbre) => void;
     playSingle: (number: number, note: string, velocity?: number) => void;
     cancelSingle: (number: number, note: string) => void;
-    scheduleMulti: (track: Track) => number[];
+    scheduleMulti: (track: Track) => number[] | number;
     scheduleSingle: (
         number: number,
         note: string,

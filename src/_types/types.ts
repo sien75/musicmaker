@@ -18,6 +18,7 @@ export type Rules = RulesMidiUrl | RulesJsonUrl | RulesObject;
 interface RulesMidiUrl {
     type: 'midiUrl';
     url: string;
+    mmComponentAppearances: MmComponentAppearance[];
     controllerAppearance: ControllerAppearance;
 }
 

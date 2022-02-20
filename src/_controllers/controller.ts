@@ -5,12 +5,8 @@ const getController = async function (
 ): Promise<Controller> {
     let rtn: Controller;
     switch (controllerType) {
-        case 'controller_custom': {
-            rtn = (await import('./custom')).default;
-            break;
-        }
         default: {
-            rtn = (await import('./normal')).default;
+            rtn = (await import('./normal')).default as Controller;
             break;
         }
     }

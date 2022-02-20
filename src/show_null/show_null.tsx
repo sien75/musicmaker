@@ -1,5 +1,20 @@
-import React from 'react';
+import React, { useEffect, memo } from 'react';
 
-const showNull = (): JSX.Element => <></>;
+import { MmComponentProps } from '../_types';
 
-export default showNull;
+const ele = ({
+    tone,
+    track,
+    should,
+    updateCurrent,
+}: MmComponentProps): JSX.Element => {
+    useEffect(() => {
+        if (should) {
+            tone.scheduleMulti(track);
+            updateCurrent(true);
+        }
+    }, [should]);
+    return <></>;
+};
+
+export default memo(ele);
