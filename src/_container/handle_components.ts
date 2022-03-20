@@ -54,7 +54,11 @@ export async function loadMmComponentValues({
         }
         const { name, position } = appearanceOfChannel;
         if (!loadedMmComponents[name])
-            loadedMmComponents[name] = (await import(`../${name}`))?.default;
+            loadedMmComponents[name] =
+                (await import(`../${name}`))?.default ||
+                loadedMmComponents.show_null ||
+                (loadedMmComponents.show_null = (await import('../show_null'))
+                    .default as MmComponent);
         const component = loadedMmComponents[name];
         if (!component) continue;
         if (
