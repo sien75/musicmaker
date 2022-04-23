@@ -11,12 +11,19 @@
     "author": "sien75 <smooooooe@hotmail.com>",
     "license": "Apache-2.0",
     "scripts": {
-        "build": "rm -r ./lib/esm/*; tsc",
+        "build:esm": "rm -r ./lib/esm/*; tsc",
         "build:cjs": "rm -r ./lib/cjs/*; tsc -m commonjs -outDir ./lib/cjs",
         "build:umd": "webpack build --config ./config/webpack.umd.js",
-        "test": ""
+        "test": "",
+        "doc": "node ./script/makeDoc.js"
+    },
+    "dependencies": {
+        "@tonejs/midi": "^2.0.28",
+        "tone": "^14.7.77"
     },
     "devDependencies": {
+        "marked": "^4.0.14",
+        "prettier": "^2.6.2",
         "ts-loader": "^9.2.8",
         "typescript": "^4.6.3",
         "webpack": "^5.72.0",
