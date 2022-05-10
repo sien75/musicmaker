@@ -4,6 +4,8 @@
 // the "Channel" is provided by Tonejs library
 // with "Channel", we can combine the sounds of multiple tracks
 
+import { memoize } from 'lodash/fp';
+
 import { Sampler, Channel } from 'tone';
 
 interface Urls {
@@ -15,17 +17,7 @@ interface Timbre {
     baseUrl?: string;
 }
 
-interface Store {
-    timbre: Timbre;
-    sampler: Sampler;
-}
-
-let store: Store[] = [];
-
-export const createSampler = (timbre: Timbre) => {
-    const storePiece = store.find(({ timbre: _timbre }) => timbre === _timbre);
-    if (storePiece) return storePiece.sampler;
-
+export const createSampler = memoize((timbre: Timbre) => {
     const { urls, baseUrl } = timbre;
     const sampler = new Sampler({
         urls,
@@ -33,13 +25,5 @@ export const createSampler = (timbre: Timbre) => {
         release: 1,
     }).connect(new Channel().toDestination());
 
-    store = [
-        ...store,
-        {
-            timbre,
-            sampler,
-        },
-    ];
-
     return sampler;
-};
+});

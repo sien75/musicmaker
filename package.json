@@ -19,6 +19,8 @@
     },
     "dependencies": {
         "@tonejs/midi": "^2.0.28",
+        "@types/lodash": "^4.14.182",
+        "lodash": "^4.17.21",
         "tone": "^14.7.77"
     },
     "devDependencies": {

@@ -4,10 +4,10 @@ export * from './sampler';
 
 export * from './play';
 
-export * from './show';
+export * from './schedule';
 
-export * from './arrange';
+export * from './sync';
 
-export * from './connect';
+export * from './toneStart';
 
 export * from './transport';

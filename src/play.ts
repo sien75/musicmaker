@@ -1,19 +1,16 @@
 // provides the ability to play single note
 // to support the "play" scene
 
+import { curry } from 'lodash/fp';
+
 import { Sampler } from 'tone';
 
-export const playSingle = (
-    sampler: Sampler,
-    note: string,
-    velocity?: number
-) => {
-    sampler.triggerAttack(note, undefined, velocity ?? 1);
-};
+export const playSingle = curry(
+    (sampler: Sampler, note: string, velocity: number) => {
+        sampler.triggerAttack(note, undefined, velocity);
+    }
+);
 
-export const cancelPlaySingle = (
-    sampler: Sampler,
-    note: string
-) => {
+export const cancelPlaySingle = curry((sampler: Sampler, note: string) => {
     sampler.triggerRelease(note);
-};
+});
