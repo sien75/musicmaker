@@ -1,5 +1,4 @@
-// the 'start' is provided by Tonejs library
-// it starts the audio context on a click or keypress event handler
+// only synced samplers can be controlled by Transport
 
 import { forEach } from 'lodash/fp';
 

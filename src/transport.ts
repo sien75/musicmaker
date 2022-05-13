@@ -1,5 +1,5 @@
 // the "Transport" is provided by Tonejs library
-// it controls the time
+// it is a controller
 
 import { Transport } from 'tone';
 

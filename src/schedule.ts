@@ -1,7 +1,7 @@
 // provides the ability to schedule multiple notes
 // to support the "show" scene
 
-// provides the ability to schedule single notes
+// provides the ability to schedule single note
 // to support the "arrange" scene
 
 // the "Track" is a combination of multiple notes
