@@ -5,7 +5,7 @@
 // to support the "arrange" scene
 
 // the "Track" is a combination of multiple notes
-// it defines a format for midi score
+// it defines a format of midi score
 
 import { curry, map } from 'lodash/fp';
 

@@ -1,5 +1,5 @@
 // the "Transport" is provided by Tonejs library
-// it is a controller
+// think of it as a controller to start, pause and stop playing audio
 
 import { Transport } from 'tone';
 
