@@ -4,7 +4,7 @@
 // the "Channel" is provided by Tonejs library
 // with "Channel", we can combine the sounds of multiple tracks
 
-import { memoize } from 'lodash/fp';
+import memoize from './memoize';
 
 import { Sampler, Channel } from 'tone';
 

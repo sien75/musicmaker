@@ -1,4 +1,4 @@
-// step1: make sure to resume audio context
+// // step1: make sure to resume audio context
 export * from './resume';
 
 // step2: create samplers for different timbres
@@ -13,7 +13,7 @@ export * from './sync';
 // "show" scene:
 // convert to midi json -> schedule multi notes -> transport start and notify drawing
 // "arrange" scene:
-// schedule single note -> get midi json -> convert to arraybuffer
+// schedule single note -> make midi json -> convert to arraybuffer
 
 export * from './transport';
 
@@ -25,4 +25,4 @@ export * from './convert';
 
 export * from './draw';
 
-export * from './getMidiJSON';
+export * from './makeMidiJSON';

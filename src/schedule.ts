@@ -7,7 +7,7 @@
 // the "Track" is a combination of multiple notes
 // it defines a format of midi score
 
-import { curry, map } from 'lodash/fp';
+import { curry, map } from 'ramda';
 
 import { Sampler, Transport } from 'tone';
 import { Track } from '@tonejs/midi';

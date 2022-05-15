@@ -3,7 +3,7 @@
 // "Midi" is defined in @tonejs/midi library
 // it describes the necessary midi infomation in JavaScript object format
 
-import { compose } from 'lodash/fp';
+import { compose } from 'ramda';
 
 import { Midi } from '@tonejs/midi';
 

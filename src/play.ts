@@ -1,7 +1,7 @@
 // provides the ability to play single note
 // to support the "play" scene
 
-import { curry } from 'lodash/fp';
+import { curry } from 'ramda';
 
 import { Sampler } from 'tone';
 

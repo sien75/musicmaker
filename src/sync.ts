@@ -1,6 +1,6 @@
 // only synced samplers can be controlled by Transport
 
-import { forEach } from 'lodash/fp';
+import { forEach } from 'ramda';
 
 import { Sampler } from 'tone';
 
