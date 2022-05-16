@@ -1,9 +1,9 @@
 const path = require('path');
 
-module.exports = {
+const base = {
     mode: 'production',
     entry: {
-        'musicmaker': path.resolve(__dirname, '../src/index.ts'),
+        musicmaker: path.resolve(__dirname, '../src/index.ts'),
     },
     output: {
         path: path.resolve(__dirname, '../lib/umd'),
@@ -25,4 +25,37 @@ module.exports = {
             },
         ],
     },
+};
+
+const lite = {
+    ...base,
+    output: {
+        ...base.output,
+        filename: '[name].lite.js',
+        clean: false,
+    },
+    externals: {
+        tone: 'tone',
+        '@tonejs/midi': '@tonejs/midi',
+    },
+};
+
+const min = {
+    ...base,
+    output: {
+        ...base.output,
+        filename: '[name].min.js',
+        clean: false,
+    },
+    externals: {
+        tone: 'tone',
+        '@tonejs/midi': '@tonejs/midi',
+        ramda: 'ramda',
+    },
+};
+
+module.exports = {
+    'musicmaker.js': base,
+    'musicmaker.lite.js': lite,
+    'musicmaker.min.js': min,
 };

@@ -13,7 +13,7 @@
     "scripts": {
         "build:esm": "node ./script/rm ./lib/esm; tsc",
         "build:cjs": "node ./script/rm ./lib/cjs; tsc -m commonjs -outDir ./lib/cjs",
-        "build:umd": "webpack build --config ./config/webpack.umd.js",
+        "build:umd": "node ./script/buildUmd ./config/webpack.umd.js",
         "test": "",
         "doc": "node ./script/makeDoc"
     },
