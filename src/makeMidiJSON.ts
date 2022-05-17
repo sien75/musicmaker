@@ -21,6 +21,8 @@ const makeNewMidiJSON = curry((midi: Midi, notess: NoteJSON[][]) => {
 export const createMidiJSON = makeNewMidiJSON(new Midi());
 
 export const appendNotesToMidiJSON = curry(
-    (midiJSON: MidiJSON, notess: NoteJSON[][]) =>
-        makeNewMidiJSON(fromJSON(midiJSON), notess)
+    (midiJSON: MidiJSON, notess: NoteJSON[][]) => {
+        const newMidiJSON = makeNewMidiJSON(fromJSON(midiJSON), notess);
+        return newMidiJSON;
+    }
 );

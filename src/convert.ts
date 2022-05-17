@@ -16,5 +16,5 @@ export const convertToMidiJSONFromArrayBuffer = compose(
 
 export const convertToUint8ArrayFromMidiJSON = compose(toUint8Array, fromJSON);
 
-export const convertToMidiJSONFromUrl_impure = async (url: string) =>
+export const convertToMidiJSONFromUrl = async (url: string) =>
     toJSON(await Midi.fromUrl(url));

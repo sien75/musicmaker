@@ -1,20 +1,18 @@
-// provides the ability to schedule multiple notes
-// to support the "show" scene
-
-// provides the ability to schedule single note
-// to support the "arrange" scene
+// provides the ability to schedule single or multiple note(s)
 
 // the "Track" is a combination of multiple notes
 // it defines a format of midi score
 
 import { curry, map } from 'ramda';
 
-import { Sampler, Transport } from 'tone';
+import { Transport } from 'tone';
 import { Track } from '@tonejs/midi';
+
+import { Instrument } from './instrument';
 
 export const scheduleSingle = curry(
     (
-        sampler: Sampler,
+        instrument: Instrument,
         note: string,
         time: number,
         duration: number,
@@ -22,17 +20,22 @@ export const scheduleSingle = curry(
     ) => {
         return Transport.schedule(
             (_time) =>
-                sampler.triggerAttackRelease(note, duration, _time, velocity),
+                instrument.triggerAttackRelease(
+                    note,
+                    duration,
+                    _time,
+                    velocity
+                ),
             time
         );
     }
 );
 
-export const scheduleMulti = curry((sampler: Sampler, track: Track) => {
+export const scheduleMulti = curry((instrument: Instrument, track: Track) => {
     const { notes } = track;
     return map(
         ({ time, duration, name: note, velocity }) =>
-            scheduleSingle(sampler, note, time, duration, velocity),
+            scheduleSingle(instrument, note, time, duration, velocity),
         notes
     );
 });
