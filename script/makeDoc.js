@@ -1,23 +1,26 @@
 const path = require('path');
-const fs = require('fs');
+const fsp = require('fs/promises');
 const marked = require('marked');
 const prettier = require('prettier');
 
-const draftPath = path.join(path.resolve('./draft'));
+const makeDoc = async () => {
+    const htmlPath = path.resolve('./draft/index.template.html');
+    const stylePath = path.resolve('./draft/style.css');
+    const readmePath = path.resolve('./README.md');
 
-const htmlPath = path.join(draftPath, 'index.template.html');
-const stylePath = path.join(draftPath, 'style.css');
-const readmePath = path.join(path.resolve('./README.md'));
+    const html = await fsp.readFile(htmlPath, 'utf-8');
+    const style = await fsp.readFile(stylePath, 'utf-8');
+    const readme = await fsp.readFile(readmePath, 'utf-8');
 
-const html = fs.readFileSync(htmlPath).toString();
-const style = fs.readFileSync(stylePath).toString();
-const readme = fs.readFileSync(readmePath).toString();
+    const doc = prettier.format(
+        html
+            .replace('${style}', style)
+            .replace('${body}', marked.parse(readme)),
+        { parser: 'html' }
+    );
 
-const doc = prettier.format(
-    html.replace('${style}', style).replace('${body}', marked.parse(readme)),
-    { parser: 'html' }
-);
+    const outputPath = path.resolve('./docs/index.html');
+    await fsp.writeFile(outputPath, doc);
+};
 
-const outputPath = path.join(path.resolve('./docs/index.html'));
-
-fs.writeFileSync(outputPath, doc);
+makeDoc();

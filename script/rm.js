@@ -1,25 +1,30 @@
-const fs = require('fs');
+const fsp = require('fs/promises');
 const path = require('path');
 
 // check if file exsits
-const fileExists = (filePath) => {
-    const fileStat = fs.statSync(filePath, { throwIfNoEntry: false });
-    return Boolean(fileStat);
+const fileExists = async (filePath) => {
+    try {
+        const fileStat = await fsp.stat(filePath);
+    } catch {
+        return false;
+    }
+    return true;
 };
 
 // dont remove files outside lib diretory
-const innerLib = (absPath) => {
+const innerLib = (absPath = '') => {
     const libPath = path.resolve('./lib');
     return absPath.includes(libPath);
 };
 
 // rm
 
-const filePath = process.argv[2];
-
-if (filePath) {
+const rm = async () => {
+    const filePath = process.argv[2];
     const absPath = path.resolve(filePath);
-    if (innerLib(absPath) && fileExists(absPath)) {
-        fs.rmdirSync(absPath, { recursive: true });
+    if (innerLib(absPath) && (await fileExists(absPath))) {
+        await fsp.rm(absPath, { recursive: true });
     }
-}
+};
+
+rm();
