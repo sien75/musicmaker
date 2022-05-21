@@ -1,9 +1,7 @@
-const path = require('path');
 const webpack = require('webpack');
 const colors = require('colors');
 
-const configFile = path.resolve(process.argv[2]);
-const configs = require(configFile);
+const configs = require('../config/webpack.umd.js');
 
 const webpackAsync = async (config, configName) => {
     return new Promise((resolve, reject) => {
