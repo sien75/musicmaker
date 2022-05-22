@@ -1,24 +1,34 @@
-// // step1: make sure to resume audio context
 export * from './resume';
 
-// step2: create instruments for different timbres
-// step3: sync instruments to transport
 export * from './instrument';
 
-// step4: 3 different scenes
-// "play" scene:
-// transport start firstly -> instrument plays single note
-// "show" scene:
-// convert to midi json -> schedule multi notes -> transport start
-// "arrange" scene:
-// schedule single note -> make midi json -> convert to arraybuffer
-
 export * from './transport';
-
 export * from './schedule';
-
-export * from './convert';
-
 export * from './draw';
 
 export * from './makeMidiJSON';
+
+export * from './convert';
+
+// step1: make sure to resume audio context
+
+// step2: create instruments for different timbres
+
+// step3: 3 different scenes
+
+// "play" scene:
+// instrument plays single note
+
+// "show" scene:
+
+// convert to midi json from url or arraybuffer ->
+// sync instruments ->
+// schedule multi notes and draw events ->
+// start the scheduled
+
+// "arrange" scene:
+
+// convert to midi json from url or arraybuffer ->
+// (edit...) ->
+// make new midi json ->
+// convert to uint8array

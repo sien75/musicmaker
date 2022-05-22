@@ -7,7 +7,7 @@ import { compose } from 'ramda';
 
 import { Midi } from '@tonejs/midi';
 
-import { toJSON, toUint8Array, fromJSON, fromArrayBuffer } from './transferMidi';
+import { toJSON, toUint8Array, fromJSON, fromArrayBuffer } from './inners/transferMidi';
 
 export const convertToMidiJSONFromArrayBuffer = compose(
     toJSON,

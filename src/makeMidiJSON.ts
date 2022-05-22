@@ -4,25 +4,29 @@ import { curry, forEach } from 'ramda';
 
 import { Midi, MidiJSON } from '@tonejs/midi';
 
-import { toJSON, fromJSON } from './transferMidi';
-import { NoteJSON } from './noteType';
+import { toJSON, fromJSON } from './inners/transferMidi';
+import { MMTrackJSON } from './inners/jsonType';
 
-const addNotes = curry((midi: Midi, notes: NoteJSON[]) => {
+export { MMTrackJSON };
+
+const addTrack = curry((midi: Midi, trackJSON: MMTrackJSON) => {
     const track = midi.addTrack();
-    forEach(track.addNote, notes);
+    track.channel = trackJSON.channel;
+    track.instrument.number = trackJSON.instrument;
+    forEach((note) => track.addNote(note), trackJSON.notes);
 });
 
-const makeNewMidiJSON = curry((midi: Midi, notess: NoteJSON[][]) => {
-    const addNotesToMidi = addNotes(midi);
-    forEach(addNotesToMidi, notess);
+const makeNewMidiJSON = curry((midi: Midi, trackJSONs: MMTrackJSON[]) => {
+    const addNotesToMidi = addTrack(midi);
+    forEach(addNotesToMidi, trackJSONs);
     return toJSON(midi);
 });
 
 export const createMidiJSON = makeNewMidiJSON(new Midi());
 
 export const appendNotesToMidiJSON = curry(
-    (midiJSON: MidiJSON, notess: NoteJSON[][]) => {
-        const newMidiJSON = makeNewMidiJSON(fromJSON(midiJSON), notess);
+    (midiJSON: MidiJSON, trackJSONs: MMTrackJSON[]) => {
+        const newMidiJSON = makeNewMidiJSON(fromJSON(midiJSON), trackJSONs);
         return newMidiJSON;
     }
 );
