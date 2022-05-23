@@ -2,9 +2,7 @@ export * from './resume';
 
 export * from './instrument';
 
-export * from './transport';
 export * from './schedule';
-export * from './draw';
 
 export * from './makeMidiJSON';
 

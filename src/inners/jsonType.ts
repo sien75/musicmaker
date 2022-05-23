@@ -1,15 +1,16 @@
-type PitchDescription = {
-    name: string;
-};
-// | {
-//       pitch: string;
-//       octave: number;
-//   }
-// | {
-//       midi: number;
-//   };
+type PitchDescription =
+    // | {
+    //       name: string;
+    //   }
+    // | {
+    //       pitch: string;
+    //       octave: number;
+    //   }
+    {
+        midi: number;
+    };
 type VelocityDescription = {
-    velocity?: number;
+    velocity: number;
     // noteOffVelocity?: number;
 };
 type TimeDescription = {
@@ -18,13 +19,25 @@ type TimeDescription = {
 };
 // | {
 //       ticks: number;
-//       durationTicks?: number;
+//       durationTicks: number;
 //   };
 
-type MMNoteJSON = PitchDescription & VelocityDescription & TimeDescription;
+export type NoteCreaterJSON = PitchDescription &
+    VelocityDescription &
+    TimeDescription;
 
-export type MMTrackJSON = {
+export type TrackCreaterJSON = {
     channel: number;
-    instrument: number;
-    notes: MMNoteJSON[];
-};
+    instrumentNumber: number;
+    notes: NoteCreaterJSON[];
+}
+
+export type NoteJSON = {
+    time: number;
+    midi: number;
+    name: string;
+    velocity: number;
+    duration: number;
+    ticks: number;
+    durationTicks: number;
+}
