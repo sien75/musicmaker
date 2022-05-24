@@ -11,12 +11,11 @@
     "author": "sien75 <smooooooe@hotmail.com>",
     "license": "Apache-2.0",
     "scripts": {
-        "build:esm": "node ./script/rm ./lib/esm; tsc",
-        "build:cjs": "node ./script/rm ./lib/cjs; tsc -m commonjs -outDir ./lib/cjs",
+        "build:esm": "node ./script/rm ./lib/esm; tsc --project ./config/tsconfig.build.json",
+        "build:cjs": "node ./script/rm ./lib/cjs; tsc -m commonjs --outDir ./lib/cjs --project ./config/tsconfig.build.json",
         "build:umd": "node ./script/buildUmd",
-        "test:esm": "webpack serve --config ./config/webpack.testEsm.js",
+        "test:browser": "webpack serve --config ./config/webpack.testBrowser.js",
         "test:cjs": "",
-        "test:umd": "",
         "doc": "node ./script/makeDoc"
     },
     "dependencies": {

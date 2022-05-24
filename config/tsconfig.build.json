@@ -7,9 +7,9 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "paths": {
-            "musicmaker": ["./lib/esm"],
-        }
+        "outDir": "../lib/esm",
+        "declaration": true,
+        "sourceMap": true,
     },
-    "include": ["./src/", "./test/"]
+    "include": ["../src/"]
 }
