@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
     mode: 'production',
     entry: {
-        index: path.resolve(__dirname, '../test/esm/index.ts'),
+        index: path.resolve(__dirname, '../test/index.ts'),
     },
     output: {
         path: path.resolve(__dirname, '../testResult'),
@@ -24,7 +24,7 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.mp3$/,
+                test: /\.(mp3|midi?)$/,
                 type: 'asset/resource',
             }
         ],
@@ -32,7 +32,7 @@ module.exports = {
     plugins: [
         new (require('html-webpack-plugin'))({
             title: 'MusicMaker',
-            template: path.resolve(__dirname, '../test/esm/index.html'),
+            template: path.resolve(__dirname, '../test/index.html'),
             // publicPath: path.resolve(__dirname, '../'),
         }),
     ],

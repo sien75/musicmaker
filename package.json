@@ -13,7 +13,7 @@
     "scripts": {
         "build:esm": "node ./script/rm ./lib/esm; tsc --project ./config/tsconfig.build.json",
         "build:umd": "node ./script/buildUmd",
-        "test": "webpack serve --config ./config/webpack.testBrowser.js",
+        "test": "webpack serve --config ./config/webpack.test.js",
         "doc": "node ./script/makeDoc"
     },
     "dependencies": {
