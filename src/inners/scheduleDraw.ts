@@ -1,22 +1,26 @@
-// schedule drawing events
-
-import { map, curry } from 'ramda';
+import { forEach, curry } from 'ramda';
 
 import { Draw, Transport } from 'tone';
 
-export const scheduleSingleDraw = curry(
-    (handler: (t: number) => any, time: number) => {
-        return Transport.schedule((_time) => {
-            Draw.schedule(() => handler(_time), _time);
-            handler(_time);
-        }, time);
-    }
-);
+import { NoteCreaterJSON } from '../jsonType';
 
-export const scheduleMultiDraw = (
+export const scheduleDrawAtTime = (
     handler: (t: number) => any,
     times: number[]
 ) => {
-    const scheduleSingleDrawOfHandler = scheduleSingleDraw(handler);
-    return map(scheduleSingleDrawOfHandler, times);
+    forEach((time) => {
+        Transport.schedule((_time) => {
+            Draw.schedule(() => handler(time), _time);
+        }, time);
+    }, times);
 };
+
+export const scheduleDrawOfNote = curry(
+    (handler: (n: NoteCreaterJSON) => any, notes: NoteCreaterJSON[]) => {
+        forEach((note) => {
+            Transport.schedule((_time) => {
+                Draw.schedule(() => handler(note), _time);
+            }, note.time);
+        }, notes);
+    }
+);

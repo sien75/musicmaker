@@ -35,27 +35,26 @@ const lite = {
         clean: false,
     },
     externals: {
-        tone: 'tone',
-        '@tonejs/midi': '@tonejs/midi',
+        ramda: 'R',
     },
 };
 
-const min = {
+const pure = {
     ...base,
     output: {
         ...base.output,
-        filename: '[name].min.js',
+        filename: '[name].pure.js',
         clean: false,
     },
     externals: {
-        tone: 'tone',
-        '@tonejs/midi': '@tonejs/midi',
-        ramda: 'ramda',
+        ramda: 'R',
+        tone: 'Tone',
+        '@tonejs/midi': 'Midi',
     },
 };
 
 module.exports = {
     'musicmaker.js': base,
     'musicmaker.lite.js': lite,
-    'musicmaker.min.js': min,
+    'musicmaker.pure.js': pure,
 };

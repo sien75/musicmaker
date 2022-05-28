@@ -1,14 +1,15 @@
-type PitchDescription =
-    // | {
-    //       name: string;
-    //   }
-    // | {
-    //       pitch: string;
-    //       octave: number;
-    //   }
-    {
-        midi: number;
-    };
+import { MidiJSON, TrackJSON } from '@tonejs/midi';
+
+type PitchDescription = {
+    name: string;
+};
+// | {
+//       pitch: string;
+//       octave: number;
+//   }
+// {
+//     midi: number;
+// };
 type VelocityDescription = {
     velocity: number;
     // noteOffVelocity?: number;
@@ -30,7 +31,7 @@ export type TrackCreaterJSON = {
     channel: number;
     instrumentNumber: number;
     notes: NoteCreaterJSON[];
-}
+};
 
 export type NoteJSON = {
     time: number;
@@ -40,4 +41,6 @@ export type NoteJSON = {
     duration: number;
     ticks: number;
     durationTicks: number;
-}
+};
+
+export { TrackJSON, MidiJSON };

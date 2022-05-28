@@ -1,18 +1,34 @@
-// provides the ability to schedule single or multiple note(s)
+// provides the ability to schedule notes
 
-// the "Track" is a combination of multiple notes
-// it defines a format of midi score
+import { forEach } from 'ramda';
 
-import { Transport } from 'tone';
+import { createSampler, Timbre } from './inners/createSampler';
 
-export { start, pause, stop } from './inners/transport';
+import { NoteCreaterJSON } from './jsonType';
 
-export { scheduleSingleNote, scheduleMultiNote } from './inners/scheduleNote';
-
-export { scheduleSingleDraw, scheduleMultiDraw } from './inners/scheduleDraw';
-
-export { scheduleSingle, scheduleMulti } from './inners/scheduleBoth';
-
-export const cancelSchedule = (id: number) => {
-    Transport.clear(id);
+export type ScheduleSampler = {
+    scheduleNote: (notes: NoteCreaterJSON[]) => void;
 };
+
+export const createScheduleSampler = async (
+    timbre: Timbre
+): Promise<ScheduleSampler> => {
+    const sampler = await createSampler(timbre);
+    sampler.sync();
+    return {
+        scheduleNote: (notes: NoteCreaterJSON[]) => {
+            forEach((note) => {
+                sampler.triggerAttackRelease(
+                    note.name,
+                    note.duration,
+                    note.time,
+                    note.velocity
+                );
+            }, notes);
+        },
+    };
+};
+
+export { scheduleDrawOfNote, scheduleDrawAtTime } from './inners/scheduleDraw';
+
+export { start, pause, stop, cancelScheduled } from './inners/transport';

@@ -1,4 +1,4 @@
-// functions to convert to or from Midi type object
+// functions to convert to or from Midi type JSON
 
 // "Midi" is defined in @tonejs/midi library
 // it describes the necessary midi infomation in JavaScript object format

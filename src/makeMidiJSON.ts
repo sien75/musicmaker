@@ -2,12 +2,10 @@
 
 import { curry, forEach } from 'ramda';
 
-import { Midi, MidiJSON, TrackJSON } from '@tonejs/midi';
+import { Midi, MidiJSON } from '@tonejs/midi';
 
 import { toJSON, fromJSON } from './inners/transferMidi';
-import { NoteJSON, NoteCreaterJSON, TrackCreaterJSON } from './inners/jsonType';
-
-export { NoteJSON, TrackJSON, MidiJSON, NoteCreaterJSON, TrackCreaterJSON };
+import { TrackCreaterJSON } from './jsonType';
 
 const addTrack = curry((midi: Midi, trackJSON: TrackCreaterJSON) => {
     const track = midi.addTrack();
@@ -22,7 +20,8 @@ const makeNewMidiJSON = curry((midi: Midi, tcJSONs: TrackCreaterJSON[]) => {
     return toJSON(midi);
 });
 
-export const createMidiJSON = makeNewMidiJSON(new Midi());
+export const createMidiJSON = (tcJSONs: TrackCreaterJSON[]) =>
+    makeNewMidiJSON(new Midi(), tcJSONs);
 
 export const appendNotesToMidiJSON = curry(
     (midiJSON: MidiJSON, tcJSONs: TrackCreaterJSON[]) => {
