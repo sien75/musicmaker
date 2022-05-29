@@ -3,9 +3,9 @@
     "version": "3.0.0",
     "description": "MusicMaker Core Library",
     "files": [
-        "lib"
+        "lib", "README_zh.md"
     ],
-    "main": "lib/cjs/index.js",
+    "main": "lib/umd/musicmaker.js",
     "module": "lib/esm/index.js",
     "repository": "git@github.com:sien75/musicmaker.git",
     "author": "sien75 <smooooooe@hotmail.com>",
