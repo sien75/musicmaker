@@ -1,6 +1,6 @@
 {
     "name": "musicmaker",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "description": "MusicMaker Core Library",
     "files": [
         "lib", "README_zh.md"
