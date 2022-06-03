@@ -1,9 +1,10 @@
 {
     "name": "musicmaker",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "description": "MusicMaker Core Library",
     "files": [
-        "lib", "README_zh.md"
+        "lib",
+        "README_zh.md"
     ],
     "main": "lib/umd/musicmaker.js",
     "module": "lib/esm/index.js",
